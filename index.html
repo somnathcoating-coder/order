@@ -104,11 +104,163 @@ footer p{font-size:10px;color:var(--mut);margin-top:5px}
 .inforow .it{font-size:11px;color:var(--mut);letter-spacing:.5px}
 .inforow .iv{font-size:13.5px;font-weight:600;margin-top:2px}
 .inforow.nolink{cursor:default}
+/* ===== LANDING PAGE ===== */
+#landing{position:fixed;inset:0;z-index:70;overflow-y:auto;-webkit-overflow-scrolling:touch;background:radial-gradient(135% 95% at 50% -12%,#0e1c18 0%,#0A0A0A 52%);color:var(--txt)}
+body.landing-on{overflow:hidden}
+.lbar{background:#07110e;border-bottom:1px solid var(--line);color:var(--gold2);font-size:9.5px;letter-spacing:1.4px;text-align:center;padding:8px 12px;font-weight:600}
+.lhead{display:flex;align-items:center;gap:12px;padding:13px 18px;position:sticky;top:0;background:rgba(8,12,11,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:5}
+.lbrand{flex:1;display:flex;flex-direction:column;line-height:1.05;cursor:pointer}
+.lbrand b{color:var(--gold);letter-spacing:4px;font-size:20px;font-weight:800}
+.lbrand span{font-size:7.5px;letter-spacing:2px;color:var(--mut);margin-top:4px}
+.lnav{display:none;gap:24px}
+.lnav a{color:#cfcfcf;font-size:12.5px;text-decoration:none;letter-spacing:.4px}
+.lnav a:hover{color:var(--gold2)}
+.lcta-sm{border:0;background:var(--gold);color:#000;font-weight:700;font-size:12.5px;padding:9px 16px;border-radius:9px;cursor:pointer;white-space:nowrap}
+.lhero{display:flex;flex-direction:column;gap:6px;padding:30px 18px 8px;max-width:1140px;margin:0 auto}
+.leyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-size:10px;letter-spacing:2.4px;font-weight:700}
+.leyebrow i{width:22px;height:2px;background:var(--teal);display:inline-block}
+.leyebrow.center{justify-content:center}
+.lhero h1{font-family:Georgia,'Times New Roman',serif;font-size:33px;line-height:1.16;margin:14px 0 0;font-weight:400;color:#f3efe6}
+.lhero h1 em{color:var(--gold2);font-style:normal;font-weight:700}
+.lhero p.lsub{font-size:13.5px;line-height:1.7;color:#b6b6b6;max-width:520px;margin-top:14px}
+.lbtns{display:flex;flex-wrap:wrap;gap:11px;margin-top:22px}
+.lbtn{border:0;border-radius:12px;padding:15px 22px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.lbtn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#000;box-shadow:0 6px 22px rgba(200,168,74,.26)}
+.lbtn.wa{background:#25D366;color:#fff}
+.lbtn.sm{padding:12px 20px;font-size:13px}
+.ltrust{display:flex;gap:6px;margin-top:28px;border-top:1px solid var(--line);padding-top:18px}
+.ltrust div{flex:1;text-align:center}
+.ltrust b{display:block;color:var(--gold2);font-size:22px;font-weight:800;font-family:Georgia,serif}
+.ltrust b small{font-size:11px}
+.ltrust span{font-size:8px;letter-spacing:1.1px;color:#888}
+.lhero-r{margin-top:30px}
+.lhcard{position:relative;border:1px solid rgba(200,168,74,.3);border-radius:18px;overflow:hidden;background:#fff;aspect-ratio:4/3}
+.lhcard img{width:100%;height:100%;object-fit:contain}
+.lhcard .ltagp{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.78);color:#fff;font-size:9px;letter-spacing:1.4px;padding:6px 11px;border-radius:20px}
+.lsec{max-width:1140px;margin:0 auto;padding:46px 18px 4px}
+.lsec-h{text-align:center;margin-bottom:24px}
+.lsec-h h2{font-family:Georgia,serif;font-size:25px;margin-top:8px;color:#f1ede4;font-weight:400}
+.lcats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .2s}
+.lcard:hover{border-color:var(--gold);transform:translateY(-2px)}
+.lcimg{position:relative;background:#fff;aspect-ratio:1}
+.lcimg img{width:100%;height:100%;object-fit:contain}
+.lcimg .lcoff{position:absolute;top:7px;left:7px;background:#25D366;color:#fff;font-size:8px;font-weight:800;letter-spacing:.5px;padding:3px 7px;border-radius:5px}
+.lcbd{padding:11px 13px 13px}
+.lct{font-size:8.5px;letter-spacing:1.3px;color:var(--teal);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lcn{font-size:14px;font-weight:600;margin:3px 0 4px}
+.lcc{font-size:11px;color:var(--gold)}
+.loffer{padding:34px 18px}
+.loff-in{max-width:1140px;margin:0 auto;background:linear-gradient(135deg,#1a1405,#2c2207);border:1px solid rgba(200,168,74,.4);border-radius:18px;padding:28px 22px;text-align:center}
+.loff-tag{color:var(--teal);font-size:10px;letter-spacing:2.4px;font-weight:700}
+.loff-h{font-family:Georgia,serif;font-size:38px;color:var(--gold2);margin:7px 0 4px}
+.loff-p{font-size:12.5px;color:#c7c0a8;margin-bottom:18px;line-height:1.6}
+.lwhy-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lwcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.lwcard .lwic{font-size:22px}
+.lwcard h3{font-size:14px;margin:10px 0 6px;color:#eee}
+.lwcard p{font-size:11.5px;color:#9a9a9a;line-height:1.6}
+.lband{text-align:center;padding:52px 18px;max-width:760px;margin:0 auto}
+.lband h2{font-family:Georgia,serif;font-size:28px;color:#f1ede4;font-weight:400}
+.lband p{font-size:13px;color:#aaa;margin:10px 0 20px}
+.lfoot{border-top:1px solid var(--line);margin-top:24px;padding:30px 18px 92px;text-align:center}
+.lfoot b{color:var(--gold);letter-spacing:4px;font-size:18px}
+.lfoot>p{font-size:10px;color:var(--mut);margin-top:6px;letter-spacing:1px}
+.lfoot-rows{max-width:430px;margin:18px auto 0;display:flex;flex-direction:column;gap:8px}
+.lfrow{display:flex;gap:11px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 13px;text-decoration:none;color:var(--txt);text-align:left}
+.lfrow .ic{font-size:16px;width:22px;text-align:center;flex:0 0 auto}
+.lfrow .it{font-size:10px;color:var(--mut);letter-spacing:.4px}
+.lfrow .iv{font-size:13px;font-weight:600;margin-top:1px}
+.lfoot-cr{font-size:10px;color:var(--mut);margin-top:20px}
+.lwa-float{position:fixed;right:16px;bottom:18px;width:54px;height:54px;border-radius:50%;background:#25D366;color:#fff;font-size:25px;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,.5);z-index:9}
+@media(min-width:760px){
+ .lnav{display:flex}
+ .lhero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:44px;padding-top:50px}
+ .lhero-r{margin-top:0}
+ .lhero h1{font-size:46px}
+ .lcats{grid-template-columns:repeat(4,1fr)}
+ .lwhy-grid{grid-template-columns:repeat(4,1fr)}
+ .lsec-h h2{font-size:31px}
+ .loff-h{font-size:46px}
+ .lbar{font-size:11px}
+}
 </style></head><body>
+<!-- ===== LANDING PAGE ===== -->
+<div id="landing">
+ <div class="lbar">PREMIUM SS HARDWARE MANUFACTURER · RAJKOT, GUJARAT · DEALER &amp; DISTRIBUTOR ENQUIRIES WELCOME</div>
+ <header class="lhead">
+  <div class="lbrand" onclick="enterApp()"><b>AADHAYA</b><span>LOCKS &amp; FITTINGS · EST. 2012</span></div>
+  <nav class="lnav">
+   <a href="#l-cats">Products</a>
+   <a href="#l-offer">Offers</a>
+   <a href="#l-why">Why Us</a>
+   <a href="#l-contact">Contact</a>
+  </nav>
+  <button class="lcta-sm" onclick="enterApp()">Order Now →</button>
+ </header>
+ <section class="lhero">
+  <div class="lhero-l">
+   <div class="leyebrow"><i></i>BUILT IN RAJKOT · PRODUCT-FIRST CATALOGUE</div>
+   <h1>Premium hardware with <em>real product depth</em>, clear pricing &amp; direct dealer enquiry.</h1>
+   <p class="lsub">Stainless steel cabinet handles, concealed &amp; profile handles, mortise locks, knobs &amp; sofa legs — browse 89 products and send your order on WhatsApp in minutes.</p>
+   <div class="lbtns">
+    <button class="lbtn gold" onclick="enterApp()">Browse Catalogue &amp; Order</button>
+    <a class="lbtn wa" href="https://wa.me/919913235199?text=Hello%20AADHAYA%20Hardware%2C%20I%20have%20a%20dealer%20enquiry.">💬 WhatsApp Enquiry</a>
+   </div>
+   <div class="ltrust">
+    <div><b>12<small>yr</small></b><span>EXPERIENCE</span></div>
+    <div><b>700+</b><span>DEALERS</span></div>
+    <div><b>89</b><span>PRODUCTS</span></div>
+    <div><b>48<small>hr</small></b><span>DISPATCH</span></div>
+   </div>
+  </div>
+  <div class="lhero-r">
+   <div class="lhcard"><span class="ltagp">SIGNATURE COLLECTION</span><img id="lheroImg" alt="AADHAYA premium hardware"></div>
+  </div>
+ </section>
+ <section id="l-offer" class="loffer">
+  <div class="loff-in">
+   <div class="loff-tag">MEGA DEALER OFFER</div>
+   <div class="loff-h">Flat 50% OFF</div>
+   <div class="loff-p">on Sofa Legs · Concealed Handles · SS &amp; Zinc Cabinet Handles · Cabinet Handles<br>SS Mortise &amp; Lock Body at special NETT pricing</div>
+   <button class="lbtn gold sm" onclick="enterApp()">Shop the Offer →</button>
+  </div>
+ </section>
+ <section id="l-cats" class="lsec">
+  <div class="lsec-h"><div class="leyebrow center"><i></i>OUR RANGE</div><h2>7 Categories · 89 Products</h2></div>
+  <div class="lcats" id="landCats"></div>
+ </section>
+ <section id="l-why" class="lsec">
+  <div class="lsec-h"><div class="leyebrow center"><i></i>WHY AADHAYA</div><h2>Built for buyers who need real visibility</h2></div>
+  <div class="lwhy-grid">
+   <div class="lwcard"><div class="lwic">🏆</div><h3>Premium SS Grade</h3><p>Corrosion-resistant stainless steel built for daily-use durability and a premium finish.</p></div>
+   <div class="lwcard"><div class="lwic">🏭</div><h3>Factory-Direct Pricing</h3><p>Buy straight from the Rajkot manufacturer — clear dealer pricing, no middlemen.</p></div>
+   <div class="lwcard"><div class="lwic">📐</div><h3>Real Catalogue Depth</h3><p>Every size, finish and price visible up front so quoting and ordering is effortless.</p></div>
+   <div class="lwcard"><div class="lwic">🚚</div><h3>Pan-India Dispatch</h3><p>Fast 48-hour dispatch with trusted delivery to dealers across the country.</p></div>
+  </div>
+ </section>
+ <section class="lband">
+  <h2>Ready to place an order?</h2>
+  <p>Browse the full catalogue and send your order on WhatsApp in under 2 minutes.</p>
+  <button class="lbtn gold" onclick="enterApp()">Enter Catalogue →</button>
+ </section>
+ <footer id="l-contact" class="lfoot">
+  <b>AADHAYA</b>
+  <p>PRECISION · DESIGN · DURABILITY</p>
+  <div class="lfoot-rows">
+   <a class="lfrow" href="https://wa.me/919913235199?text=Hello%20AADHAYA%20Hardware!"><span class="ic">💬</span><div><div class="it">WhatsApp / Call</div><div class="iv">+91 99132 35199</div></div></a>
+   <a class="lfrow" href="https://maps.app.goo.gl/kduqaERxMUL3NhQj7" target="_blank"><span class="ic">📍</span><div><div class="it">Visit / Factory</div><div class="iv">Patel Nagar, Rajkot, Gujarat — 360001</div></div></a>
+   <div class="lfrow"><span class="ic">🧾</span><div><div class="it">GSTIN · Shivam Hardware</div><div class="iv">24BITPG5534R1ZI</div></div></div>
+   <div class="lfrow"><span class="ic">🕑</span><div><div class="it">Business Hours</div><div class="iv">Mon–Sat: 10 AM – 8 PM · Sunday closed</div></div></div>
+  </div>
+  <div class="lfoot-cr">© 2026 Aadhaya Locks &amp; Fittings · All Rights Reserved</div>
+ </footer>
+ <a class="lwa-float" href="https://wa.me/919913235199?text=Hello%20AADHAYA%20Hardware!" aria-label="WhatsApp">💬</a>
+</div>
 
 <header>
  <div class="hrow">
-  <div class="brand"><b>AADHAYA</b><span>LOCKS &amp; FITTINGS</span></div>
+  <div class="brand" onclick="backToLanding()" style="cursor:pointer"><b>AADHAYA</b><span>LOCKS &amp; FITTINGS</span></div>
   <div class="cartBtn" onclick="openInfo()" style="margin-right:8px;font-size:17px">ℹ️</div>
   <div class="cartBtn" onclick="openCart()">🛒<div class="ct" id="cartCount" style="display:none">0</div></div>
  </div>
@@ -201,6 +353,40 @@ const chipsEl=document.getElementById('chips');
  d.onclick=()=>{cat=n;[...chipsEl.children].forEach(c=>c.classList.toggle('on',c.textContent===n));render()};
  chipsEl.appendChild(d);
 });
+
+/* ---- LANDING PAGE WIRING ---- */
+document.body.classList.add('landing-on');
+(function(){
+ const lc=document.getElementById('landCats');
+ if(lc){
+  CATS.forEach(cc=>{
+   const prods=P.filter(p=>p.category===cc.name);
+   const off=DISC_CATS.includes(cc.name);
+   const im=prods.length?IMG[prods[0].code]:'';
+   const el=document.createElement('div');el.className='lcard';
+   el.onclick=()=>enterApp(cc.name);
+   el.innerHTML='<div class="lcimg">'+(off?'<span class="lcoff">50% OFF</span>':'')+'<img loading="lazy" src="data:image/jpeg;base64,'+im+'"></div>'
+     +'<div class="lcbd"><div class="lct">'+((cc.tagline||'Premium Range').toUpperCase())+'</div>'
+     +'<div class="lcn">'+cc.name+'</div><div class="lcc">'+prods.length+' products →</div></div>';
+   lc.appendChild(el);
+  });
+ }
+ const hi=document.getElementById('lheroImg');
+ if(hi){const f=P.find(p=>p.featured)||P.find(p=>p.bestseller)||P[0];if(f)hi.src='data:image/jpeg;base64,'+IMG[f.code];}
+})();
+function enterApp(c){
+ if(c){cat=c;}else{cat='All';}
+ [...chipsEl.children].forEach(x=>x.classList.toggle('on',x.textContent===cat));
+ render();
+ document.body.classList.remove('landing-on');
+ const l=document.getElementById('landing');if(l)l.style.display='none';
+ window.scrollTo(0,0);
+}
+function backToLanding(){
+ document.body.classList.add('landing-on');
+ const l=document.getElementById('landing');if(l){l.style.display='block';l.scrollTop=0;}
+ window.scrollTo(0,0);
+}
 
 function money(n){return '₹'+n.toLocaleString('en-IN')}
 function card(p){return `<div class="pc" onclick="openSheet('${p.code}')">
