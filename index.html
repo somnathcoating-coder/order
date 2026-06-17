@@ -105,7 +105,7 @@ footer p{font-size:10px;color:var(--mut);margin-top:5px}
 .inforow .iv{font-size:13.5px;font-weight:600;margin-top:2px}
 .inforow.nolink{cursor:default}
 /* ===== LANDING PAGE ===== */
-#landing{position:fixed;inset:0;z-index:70;overflow-y:auto;-webkit-overflow-scrolling:touch;background:radial-gradient(135% 95% at 50% -12%,#0e1c18 0%,#0A0A0A 52%);color:var(--txt)}
+#landing{display:none;position:fixed;inset:0;z-index:70;overflow-y:auto;-webkit-overflow-scrolling:touch;background:radial-gradient(135% 95% at 50% -12%,#0e1c18 0%,#0A0A0A 52%);color:var(--txt)}
 body.landing-on{overflow:hidden}
 .lbar{background:#07110e;border-bottom:1px solid var(--line);color:var(--gold2);font-size:9.5px;letter-spacing:1.4px;text-align:center;padding:8px 12px;font-weight:600}
 .lhead{display:flex;align-items:center;gap:12px;padding:13px 18px;position:sticky;top:0;background:rgba(8,12,11,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:5}
@@ -394,7 +394,7 @@ const chipsEl=document.getElementById('chips');
 });
 
 /* ---- LANDING PAGE WIRING ---- */
-document.body.classList.add('landing-on');
+
 (function(){
  const lc=document.getElementById('landCats');
  if(lc){
@@ -422,9 +422,9 @@ function enterApp(c){
  window.scrollTo(0,0);updateBadge();
 }
 function backToLanding(){
- document.body.classList.add('landing-on');
- const l=document.getElementById('landing');if(l){l.style.display='block';l.scrollTop=0;}
- window.scrollTo(0,0);updateBadge();
+ cat='All';[...chipsEl.children].forEach(x=>x.classList.toggle('on',x.textContent==='All'));
+ var q=document.getElementById('q');if(q)q.value='';
+ render();window.scrollTo(0,0);
 }
 
 function money(n){return '₹'+n.toLocaleString('en-IN')}
