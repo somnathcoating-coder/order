@@ -455,12 +455,18 @@ function render(){
 }
 
 // derive ORIGINAL unit price from selected size/finish, falling back to min row
+function finAbbr(f){f=(f||'').toLowerCase().trim();var m={'chrome':'c.p','c.p':'c.p','satin nickel':'s.n','satin':'s.n','z. black':'z.b','z.black':'z.b','rose gold':'r.g','gold':'g.d','china black':'c.b'};return m[f]||'';}
+function rowMatchesFin(label,f){if(!f)return false;var L=label.toLowerCase();if(L.indexOf(f.toLowerCase())>-1)return true;var a=finAbbr(f);if(!a)return false;return L.split(/[^a-z0-9.]+/).indexOf(a)>-1;}
 function unitPriceOrig(){
  if(!cur)return 0;
- const rows=cur.priceRows;
- if(selSize){const m=rows.find(r=>r.label.includes(selSize));if(m)return m.price}
- if(selFin){const m=rows.find(r=>r.label.toLowerCase().includes(selFin.toLowerCase()));if(m)return m.price}
- return rows.length?Math.min(...rows.map(r=>r.price)):0;
+ var rows=cur.priceRows; if(!rows.length)return 0;
+ if(selSize){
+  var sr=rows.filter(function(r){return r.label.indexOf(selSize)>-1});
+  if(sr.length>1&&selFin){var fm=sr.filter(function(r){return rowMatchesFin(r.label,selFin)});if(fm.length)return fm[0].price;}
+  if(sr.length)return sr[0].price;
+ }
+ if(selFin){var m=rows.filter(function(r){return rowMatchesFin(r.label,selFin)});if(m.length)return m[0].price;}
+ return Math.min.apply(null,rows.map(function(r){return r.price}));
 }
 function refreshPrice(){
  document.getElementById('qv').textContent=qty;
