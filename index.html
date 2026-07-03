@@ -295,6 +295,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,.opt:focus-visible,.chi
 <header>
  <div class="hrow">
   <div class="brand" onclick="backToLanding()" style="cursor:pointer"><b>AADHAYA</b><span>LOCKS &amp; FITTINGS</span></div>
+  <div class="cartBtn" role="button" tabindex="0" aria-label="Connect with us" onclick="openConnect()" style="margin-right:8px;font-size:17px">📞</div>
   <div class="cartBtn" role="button" tabindex="0" aria-label="Store info & my orders" onclick="openInfo()" style="margin-right:8px;font-size:17px">ℹ️</div>
   <div class="cartBtn" role="button" tabindex="0" aria-label="Your order" onclick="openCart()">🛒<div class="ct" id="cartCount" style="display:none">0</div></div>
  </div>
@@ -337,15 +338,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,.opt:focus-visible,.chi
  <div class="sh-cta"><a class="btn wa" id="sendBtn" onclick="sendOrder(event)">💬 Send Order on WhatsApp</a></div>
 </div>
 
-<!-- store info sheet -->
-<div class="sheet" id="infoSheet">
- <div class="sh-top"><b>STORE INFORMATION</b><div class="x" onclick="closeAll()">✕</div></div>
+<!-- connect with us sheet -->
+<div class="sheet" id="connectSheet">
+ <div class="sh-top"><b>CONNECT WITH US</b><div class="x" onclick="closeAll()">✕</div></div>
  <div class="sh-body">
   <div class="sh-pad">
    <div class="sr">AADHAYA LOCKS &amp; FITTINGS</div>
-   <h2>Aadhaya Hardware</h2>
-   <div class="mdl">PREMIUM ARCHITECTURAL HARDWARE · SINCE 2012</div>
-   <p class="desc" style="margin-top:14px">Manufacturer &amp; supplier of premium SS cabinet handles, concealed handles, mortise locks, knobs &amp; sofa legs — trusted by 700+ dealers across India.</p>
+   <h2>Connect With Us</h2>
+   <div class="mdl">DEALER &amp; DISTRIBUTOR ENQUIRIES WELCOME</div>
+   <p class="desc" style="margin-top:14px">Reach us directly for orders, pricing and dealer &amp; distributor enquiries — we usually reply within business hours.</p>
 
    <div class="lbl">CONTACT</div>
    <a class="inforow" href="https://wa.me/919913235199?text=Hello%20AADHAYA%20Hardware!%20I%20have%20an%20enquiry."><span class="ic">💬</span><div><div class="it">WhatsApp (Orders & Enquiry)</div><div class="iv">+91 99132 35199</div></div></a>
@@ -355,6 +356,20 @@ button:focus-visible,a:focus-visible,input:focus-visible,.opt:focus-visible,.chi
    <div class="lbl">VISIT US</div>
    <a class="inforow" href="https://maps.app.goo.gl/kduqaERxMUL3NhQj7" target="_blank"><span class="ic">📍</span><div><div class="it">Patel Nagar, Rajkot</div><div class="iv">Gujarat — 360001, India · Tap for directions</div></div></a>
    <div class="inforow nolink"><span class="ic">🕑</span><div><div class="it">Business Hours</div><div class="iv">Mon–Sat: 10 AM – 8 PM · Sunday closed</div></div></div>
+  </div>
+ </div>
+ <div class="sh-cta"><a class="btn wa" href="https://wa.me/919913235199?text=Hello%20AADHAYA%20Hardware!%20I%20have%20an%20enquiry.">💬 Message on WhatsApp</a></div>
+</div>
+
+<!-- store info sheet -->
+<div class="sheet" id="infoSheet">
+ <div class="sh-top"><b>STORE INFORMATION</b><div class="x" onclick="closeAll()">✕</div></div>
+ <div class="sh-body">
+  <div class="sh-pad">
+   <div class="sr">AADHAYA LOCKS &amp; FITTINGS</div>
+   <h2>Aadhaya Hardware</h2>
+   <div class="mdl">PREMIUM ARCHITECTURAL HARDWARE · SINCE 2012</div>
+   <p class="desc" style="margin-top:14px">Manufacturer &amp; supplier of premium SS cabinet handles, concealed handles, mortise locks, knobs &amp; sofa legs — trusted by 700+ dealers across India.</p>
 
    <div class="lbl">BUSINESS DETAILS</div>
    <div class="inforow nolink"><span class="ic">🧾</span><div><div class="it">GSTIN</div><div class="iv">24BITPG5534R1ZI</div></div></div>
@@ -582,9 +597,10 @@ function sendOrder(e){
 }
 function reorder(i){var oh=JSON.parse(localStorage.getItem('aad_orders')||'[]');if(!oh[i])return;cart=JSON.parse(JSON.stringify(oh[i].items));saveCart();closeAll();openCart();toast('Order loaded \u2014 review & send');}
 
+function openConnect(){document.getElementById('connectSheet').classList.add('open');document.getElementById('ovbg').classList.add('open')}
 function openInfo(){var oh=JSON.parse(localStorage.getItem('aad_orders')||'[]');var el=document.getElementById('ohList');if(el)el.innerHTML=oh.length?oh.map(function(o,i){return '<div class="ohrow"><div class="ohi"><div class="oht">'+o.qty+' pcs \u00b7 \u20b9'+o.tot.toLocaleString('en-IN')+'</div><div class="ohd">'+new Date(o.d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})+' \u00b7 '+o.items.length+' item(s)</div></div><button class="ohb" onclick="reorder('+i+')">Reorder</button></div>'}).join(''):'<div style="color:var(--mut);font-size:12px;padding:2px 0 6px">No past orders yet. Orders you send will appear here for one-tap reordering.</div>';document.getElementById('infoSheet').classList.add('open');document.getElementById('ovbg').classList.add('open')}
 let tt;function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),1800)}
-function closeAll(){['sheet','cartSheet','infoSheet'].forEach(id=>document.getElementById(id).classList.remove('open'));document.getElementById('ovbg').classList.remove('open')}
+function closeAll(){['sheet','cartSheet','infoSheet','connectSheet'].forEach(id=>document.getElementById(id).classList.remove('open'));document.getElementById('ovbg').classList.remove('open')}
 updateBadge();render();
 </script>
 </body></html>
