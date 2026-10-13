@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111214">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>AADHAYA Sales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C8A84A; --gold-d:#A98C34; --gold-l:#F7F0DC;
+  --ink:#111214; --ink-2:#1B1D20;
+  --bg:#F4F5F7; --card:#FFFFFF; --line:#E6E8EC; --line-2:#F0F1F4;
+  --tx:#14161A; --tx-2:#5B6270; --tx-3:#8A91A0;
+  --green:#0F9D58; --green-bg:#E8F5EE;
+  --red:#D93025; --red-bg:#FDECEA;
+  --amber:#B26A00; --amber-bg:#FFF4E5;
+  --r:14px; --sh:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.06);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:Poppins,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);
+  font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+input,textarea,select{outline:none}
+.hide{display:none!important}
+
+/* login */
+#login{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:24px;
+  background:radial-gradient(1000px 600px at 50% -10%,#26282D 0%,#111214 55%,#0A0A0B 100%)}
+.lg{width:100%;max-width:360px;text-align:center}
+.lg-m{font-size:24px;font-weight:700;letter-spacing:.16em;color:#fff}
+.lg-m span{color:var(--gold)}
+.lg-s{color:#8D93A0;font-size:11px;letter-spacing:.26em;text-transform:uppercase;margin:4px 0 30px}
+.lg-b{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:24px 20px}
+.lg-b input{width:100%;padding:13px 14px;margin-bottom:11px;border-radius:10px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.28);color:#fff;font-size:15px}
+.lg-b input:focus{border-color:var(--gold)}
+.lg-b button{width:100%;padding:13px;border-radius:10px;background:var(--gold);color:#14161A;font-weight:600;font-size:15px}
+.lg-b button:disabled{opacity:.55}
+.lg-e{color:#FF8A80;font-size:12.5px;margin-top:12px;min-height:17px}
+
+/* shell */
+header{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;
+  display:flex;align-items:center;gap:10px}
+.brand{font-weight:700;letter-spacing:.14em;font-size:15px}
+.brand span{color:var(--gold)}
+.hd-t{flex:1;min-width:0}
+.hd-sub{font-size:11px;color:#9AA0AC;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd-btn{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.07)}
+main{padding:14px 16px calc(96px + var(--safe-b));max-width:760px;margin:0 auto}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);
+  display:flex;padding:6px 6px calc(6px + var(--safe-b))}
+nav.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:11px;color:var(--tx-3);position:relative}
+nav.tabs button.on{color:var(--ink);font-weight:600}
+nav.tabs button.on svg{stroke:var(--gold-d)}
+nav.tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.badge{position:absolute;top:0;left:calc(50% + 6px);background:var(--gold);color:var(--ink);font-size:10px;font-weight:700;
+  min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 5px}
+
+/* common */
+h2{font-size:17px;margin:4px 0 12px;font-weight:600}
+h3{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--tx-3);margin:20px 0 10px;font-weight:600}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:14px}
+.mb{margin-bottom:12px}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1;min-width:0}
+.muted{color:var(--tx-2)} .small{font-size:12px}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search{width:100%;padding:12px 14px 12px 40px;border-radius:12px;border:1px solid var(--line);background:#fff
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%238A91A0' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") 13px center no-repeat;font-size:15px}
+.search:focus,.inp:focus{border-color:var(--gold)}
+.inp{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:15px}
+label.f{display:block;font-size:12px;color:var(--tx-2);margin:10px 0 4px}
+.btn{text-decoration:none;color:inherit;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 16px;border-radius:12px;font-weight:600;font-size:14px}
+.btn-p{background:var(--ink);color:#fff} .btn-g{background:var(--gold);color:var(--ink)}
+.btn-o{border:1px solid var(--line);background:#fff}
+.btn-w{background:#25D366;color:#fff}
+.btn-b{width:100%}
+.btn:disabled{opacity:.5}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+.p-g{background:var(--green-bg);color:var(--green)} .p-r{background:var(--red-bg);color:var(--red)}
+.p-a{background:var(--amber-bg);color:var(--amber)} .p-n{background:var(--line-2);color:var(--tx-2)}
+.p-gold{background:var(--gold-l);color:var(--gold-d)}
+.empty{text-align:center;color:var(--tx-3);padding:40px 10px}
+
+/* home */
+.hero{background:linear-gradient(135deg,#1B1D20,#111214);color:#fff;border-radius:18px;padding:18px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;
+  border:1px solid rgba(200,168,74,.25)}
+.hero .k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.hero .v{font-size:26px;font-weight:600;margin-top:2px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.kpis div{background:rgba(255,255,255,.06);border-radius:10px;padding:8px 10px}
+.kpis b{display:block;font-size:16px} .kpis span{font-size:10.5px;color:#9AA0AC}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.act{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:14px;text-align:left}
+.act b{display:block;font-size:14px;margin-top:6px} .act span{font-size:11.5px;color:var(--tx-2)}
+.act i{font-style:normal;font-size:20px}
+
+/* catalogue */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;margin:0 -16px;padding-left:16px;padding-right:16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:7px 13px;border-radius:20px;background:#fff;border:1px solid var(--line);font-size:12.5px;white-space:nowrap}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:560px){.grid{grid-template-columns:repeat(3,1fr)}}
+.prod{background:#fff;border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;text-align:left;display:flex;flex-direction:column}
+.ph{aspect-ratio:1/1;background:#fff;display:grid;place-items:center;position:relative;border-bottom:1px solid var(--line-2)}
+.ph img{width:100%;height:100%;object-fit:contain;padding:10px}
+.ph .ini{font-size:12px;letter-spacing:.12em;color:var(--tx-3);font-weight:600}
+.ph .tag{position:absolute;left:8px;top:8px}
+.prod .b{padding:9px 10px 11px}
+.prod .nm{font-weight:600;font-size:13px;line-height:1.3}
+.prod .cd{font-size:11px;color:var(--tx-3)}
+.prod .rt{font-size:12.5px;margin-top:3px}
+
+/* sheet */
+#ov{position:fixed;inset:0;background:rgba(10,10,12,.5);z-index:40;opacity:0;pointer-events:none;transition:.2s}
+#ov.on{opacity:1;pointer-events:auto}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--bg);border-radius:20px 20px 0 0;max-height:92vh;
+  overflow:auto;transform:translateY(100%);transition:transform .25s;padding:0 0 calc(16px + var(--safe-b))}
+#sheet.on{transform:none}
+@media(min-width:760px){#sheet{left:50%;width:720px;margin-left:-360px}}
+.sh-h{position:sticky;top:0;background:var(--bg);padding:10px 16px 8px;z-index:2}
+.grab{width:40px;height:4px;border-radius:2px;background:#CDD2DA;margin:0 auto 10px}
+.sh-b{padding:0 16px}
+.x{width:34px;height:34px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:var(--sh);font-size:18px}
+.bigph{background:#fff;border-radius:var(--r);aspect-ratio:4/3;display:grid;place-items:center;margin-bottom:12px}
+.bigph img{max-width:100%;max-height:100%;object-fit:contain;padding:14px}
+.vt{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.vt td,.vt th{padding:9px 10px;border-bottom:1px solid var(--line-2);text-align:left;font-size:13px}
+.vt th{font-size:11px;color:var(--tx-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;background:#FAFBFC}
+.vt tr:last-child td{border-bottom:0}
+.stp{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.stp button{width:32px;height:34px;font-size:18px;color:var(--tx-2)}
+.stp input{width:46px;height:34px;border:0;text-align:center;font-weight:600;-moz-appearance:textfield}
+.stp input::-webkit-outer-spin-button,.stp input::-webkit-inner-spin-button{-webkit-appearance:none}
+.stp.has{border-color:var(--gold)} .stp.has input{color:var(--gold-d)}
+.foot{position:sticky;bottom:0;background:var(--bg);padding:12px 16px 0;margin-top:12px;display:flex;gap:8px}
+
+/* party / order */
+.li{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-bottom:1px solid var(--line-2);text-align:left;width:100%}
+.li:first-child{border-radius:var(--r) var(--r) 0 0} .li:last-child{border-bottom:0;border-radius:0 0 var(--r) var(--r)}
+.li:only-child{border-radius:var(--r)}
+.list{box-shadow:var(--sh);border-radius:var(--r)}
+.av{width:38px;height:38px;border-radius:50%;background:var(--gold-l);color:var(--gold-d);display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.amt{font-weight:600;text-align:right;white-space:nowrap}
+.cl{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--line-2)}
+.cl:last-child{border-bottom:0}
+.cl .th{width:52px;height:52px;border-radius:10px;background:#fff;border:1px solid var(--line-2);flex:none;display:grid;place-items:center;overflow:hidden}
+.cl .th img{width:100%;height:100%;object-fit:contain}
+.tot{display:flex;justify-content:space-between;padding:6px 0;font-size:14px}
+.tot.g{font-size:18px;font-weight:700;border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
+.sel-party{display:flex;align-items:center;gap:12px;background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px;width:100%;text-align:left}
+
+#toast{position:fixed;left:50%;bottom:calc(84px + var(--safe-b));transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+  padding:10px 16px;border-radius:10px;font-size:13px;opacity:0;transition:.2s;z-index:60;max-width:90vw;text-align:center;pointer-events:none}
+#toast.on{opacity:1;transform:translateX(-50%)}
+#toast.err{background:var(--red)}
+#busy{position:fixed;top:0;left:0;right:0;height:3px;z-index:70;background:var(--gold);transform-origin:left;transform:scaleX(0);transition:transform .4s}
+#busy.on{transform:scaleX(.8);transition:transform 8s cubic-bezier(.1,.7,.2,1)}
+.net{background:var(--amber-bg);color:var(--amber);font-size:12px;padding:8px 12px;border-radius:10px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div id="busy"></div>
+<div id="toast"></div>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lg">
+    <div class="lg-m">AADH<span>A</span>YA</div>
+    <div class="lg-s">Sales Team</div>
+    <form class="lg-b" id="lgF">
+      <input id="lgEmail" type="email" placeholder="Email" autocomplete="username" required>
+      <input id="lgPass" type="password" placeholder="Password" autocomplete="current-password" required>
+      <button id="lgBtn" type="submit">Login</button>
+      <div class="lg-e" id="lgErr"></div>
+    </form>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hide">
+  <header>
+    <div class="hd-t">
+      <div class="brand">AADH<span>A</span>YA <span style="color:#9AA0AC;font-weight:500;letter-spacing:.1em">SALES</span></div>
+      <div class="hd-sub" id="hdSub"></div>
+    </div>
+    <button class="hd-btn" id="hdSync" title="Refresh">⟳</button>
+    <button class="hd-btn" id="hdOut" title="Logout">⏻</button>
+  </header>
+  <main id="view"></main>
+  <nav class="tabs" id="tabs">
+    <button data-t="home"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>Home</button>
+    <button data-t="catalog"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Catalogue</button>
+    <button data-t="cart"><svg viewBox="0 0 24 24"><path d="M6 6h15l-2 9H8L6 3H3"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Order<span class="badge hide" id="cartN"></span></button>
+    <button data-t="parties"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.8.7 3 2.4 3.5 5.2"/></svg>Dealers</button>
+    <button data-t="orders"><svg viewBox="0 0 24 24"><path d="M7 3h10l3 3v15H4V3h3"/><path d="M8 10h8M8 14h8M8 18h5"/></svg>My Orders</button>
+  </nav>
+</div>
+
+<div id="ov"></div>
+<div id="sheet"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* =========================================================================
+   AADHAYA SALES — field salesman app
+   - Data: same Supabase project as Accounts (index.html)
+   - Reads ONLY sale-side data (v_stock sale_rate, items catalogue fields,
+     party balance / outstanding). Purchase rate & profit are never fetched.
+   - Orders go through the existing place_order() RPC → land in Accounts
+     "orders" exactly like the customer order app, tagged "Salesman: <name>".
+   - Offline-safe: orders queue on the phone and retry; client_ref keeps
+     retries idempotent (no duplicate orders).
+   ========================================================================= */
+const CFG = {
+  url : 'https://rtgfbovemrxfsiflwmvp.supabase.co',
+  key : 'sb_publishable_BjpMZA25KLEHoDiX1FYZmA_W_7XBwjN',
+  firm: 'AADHAYA HARDWARE',
+};
+const IMGBASE = 'https://order.aadhayahardware.com/';
+const LS = { cart:'sm_cart', party:'sm_party', queue:'sm_queue', cat:'sm_cat' };
+
+let sb = null;
+const S = { user:null, me:'', slug:'', items:[], stock:[], cats:[], parties:[],
+            itemById:{}, varsByItem:{}, cart:[], party:null, queue:[], tab:'home',
+            cat:'', q:'', pq:'', myOrders:[] };
+
+/* ---------- helpers ---------- */
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const esc= s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n2 = v=>Math.round((+v||0)*100)/100;
+const money = v=>'₹'+n2(v).toLocaleString('en-IN',{maximumFractionDigits:2});
+const m10 = s=>String(s||'').replace(/\D/g,'').slice(-10);
+const dmy = d=>{ if(!d) return ''; const x=new Date(d); return x.toLocaleDateString('en-IN',{day:'2-digit',month:'short'}) };
+const tm  = d=>new Date(d).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+const rnd = ()=>Math.random().toString(36).slice(2,10);
+const lsGet=(k,d)=>{ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d }catch(e){ return d } };
+const lsSet=(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)) }catch(e){} };
+const imgUrl = code=>IMGBASE+String(code||'').replace(/[^A-Za-z0-9._-]/g,'_')+'.jpg';
+const initials = s=>String(s||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+function ph(code,label){
+  return `<img loading="lazy" alt="" data-l="${esc(String(label||'').slice(0,12))}" src="${imgUrl(code)}" onerror="phErr(this)">`;
+}
+function phErr(img){ const s=document.createElement('span'); s.className='ini'; s.textContent=img.dataset.l||''; img.replaceWith(s) }
+function busy(on){ $('#busy').classList.toggle('on',on) }
+let tT;
+function toast(msg,kind){ const t=$('#toast'); t.textContent=msg; t.className='on'+(kind==='err'?' err':''); clearTimeout(tT); tT=setTimeout(()=>t.className='',2600) }
+
+async function all(tbl, sel, mod){
+  const step=1000; let out=[], from=0;
+  for(;;){
+    let q=sb.from(tbl).select(sel).range(from,from+step-1);
+    if(mod) q=mod(q);
+    const {data,error}=await q;
+    if(error) throw error;
+    out=out.concat(data||[]);
+    if(!data||data.length<step) break;
+    from+=step;
+  }
+  return out;
+}
+
+/* ---------- data ---------- */
+async function loadAll(){
+  busy(true);
+  try{
+    const [items, stock, cats, parties] = await Promise.all([
+      all('items','id,app_code,name,category,series,material,description,unit,bestseller,is_new,featured,sort_order',
+          q=>q.eq('is_active',true).eq('show_in_app',true)),
+      // v_stock carries sale_rate only — no purchase/cost columns
+      all('v_stock','variant_id,item_id,size,finish,sale_rate,available',q=>q.eq('show_in_app',true)),
+      all('categories','name,tagline,sort_order',q=>q.eq('is_active',true).order('sort_order')),
+      loadParties(),
+    ]);
+    S.items=items; S.stock=stock; S.cats=cats; S.parties=parties;
+    S.itemById={}; items.forEach(i=>S.itemById[i.id]=i);
+    S.varsByItem={}; stock.forEach(v=>(S.varsByItem[v.item_id]=S.varsByItem[v.item_id]||[]).push(v));
+    Object.values(S.varsByItem).forEach(a=>a.sort((x,y)=>String(x.size).localeCompare(String(y.size),undefined,{numeric:true})||String(x.finish).localeCompare(y.finish)));
+    const catOrder={}; cats.forEach(c=>catOrder[c.name]=c.sort_order);
+    S.items.sort((a,b)=>(catOrder[a.category]??99)-(catOrder[b.category]??99)
+      || (b.featured-a.featured) || (b.bestseller-a.bestseller) || ((a.sort_order||0)-(b.sort_order||0)) || String(a.app_code).localeCompare(b.app_code));
+    // keep cart rates fresh
+    const vById={}; stock.forEach(v=>vById[v.variant_id]=v);
+    S.cart.forEach(l=>{ const v=vById[l.vid]; if(v){ l.rate=+v.sale_rate||0; l.avail=+v.available||0 } });
+    saveCart();
+  }finally{ busy(false) }
+}
+/* sm_parties / sm_bills = salesman-safe views (supabase/migrations/…_salesman_role.sql).
+   Until that migration is applied, fall back to the Accounts views. */
+S.smViews=true;
+async function loadParties(){
+  const cols='party_id,code,name,kind,phone,city,balance,last_activity';
+  if(S.smViews){
+    try{ return await all('sm_parties',cols,q=>q.order('name')) }
+    catch(e){ S.smViews=false }
+  }
+  return all('v_party_balance',cols,q=>q.neq('kind','supplier').order('name'));
+}
+function priceRange(itemId){
+  const vs=(S.varsByItem[itemId]||[]).map(v=>+v.sale_rate||0).filter(Boolean);
+  if(!vs.length) return '';
+  const lo=Math.min(...vs), hi=Math.max(...vs);
+  return lo===hi? money(lo) : money(lo)+' – '+money(hi);
+}
+function itemAvail(itemId){ return (S.varsByItem[itemId]||[]).reduce((a,v)=>a+Math.max(0,+v.available||0),0) }
+
+/* ---------- cart ---------- */
+function saveCart(){ lsSet(LS.cart,S.cart); lsSet(LS.party,S.party); paintBadge() }
+function cartQty(vid){ const l=S.cart.find(x=>x.vid===vid); return l?l.qty:0 }
+function setQty(v,item,qty){
+  qty=Math.max(0,Math.min(100000,Math.round(+qty||0)));
+  const i=S.cart.findIndex(x=>x.vid===v.variant_id);
+  if(qty===0){ if(i>=0) S.cart.splice(i,1) }
+  else if(i>=0) S.cart[i].qty=qty;
+  else S.cart.push({ vid:v.variant_id, code:item.app_code, name:item.name, size:v.size, finish:v.finish,
+                     rate:+v.sale_rate||0, avail:+v.available||0, qty });
+  saveCart();
+}
+function cartTotal(){ return S.cart.reduce((a,l)=>a+l.qty*l.rate,0) }
+function paintBadge(){
+  const n=S.cart.length, b=$('#cartN');
+  b.textContent=n; b.classList.toggle('hide',!n);
+}
+
+/* ---------- sheet ---------- */
+function openSheet(html){ $('#sheet').innerHTML=html; $('#sheet').scrollTop=0; $('#ov').classList.add('on'); $('#sheet').classList.add('on') }
+function closeSheet(){ $('#ov').classList.remove('on'); $('#sheet').classList.remove('on') }
+$('#ov').onclick=closeSheet;
+
+/* ---------- navigation ---------- */
+function go(t){
+  S.tab=t;
+  $$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  ({home,catalog,cart,parties,orders})[t]();
+  window.scrollTo(0,0);
+}
+$$('#tabs button').forEach(b=>b.onclick=()=>go(b.dataset.t));
+
+function hdSub(){
+  $('#hdSub').textContent = S.party ? 'Order for: '+S.party.name : 'Hi '+S.me+' · koi dealer select nahi';
+}
+
+/* ================= HOME ================= */
+async function home(){
+  hdSub();
+  const v=$('#view');
+  const today=new Date().toISOString().slice(0,10);
+  const tOrders=S.myOrders.filter(o=>o.created_at.slice(0,10)===today);
+  v.innerHTML=`
+    ${S.queue.length?`<div class="net">${S.queue.length} order phone par pending hai (network nahi tha). <b id="qRetry" style="text-decoration:underline">Abhi bhejo</b></div>`:''}
+    <div class="hero">
+      <div class="k">Today</div>
+      <div class="v">${money(tOrders.reduce((a,o)=>a+ +o.est_total,0))}</div>
+      <div style="font-size:12px;color:#9AA0AC">${tOrders.length} order booked</div>
+      <div class="kpis">
+        <div><b>${S.myOrders.filter(o=>o.status==='new').length}</b><span>Pending</span></div>
+        <div><b>${S.myOrders.filter(o=>o.status==='converted').length}</b><span>Billed</span></div>
+        <div><b>${S.parties.length}</b><span>Dealers</span></div>
+      </div>
+    </div>
+    <div class="acts">
+      <button class="act" data-a="party"><i>🏪</i><b>${S.party?esc(S.party.name):'Dealer chuno'}</b><span>${S.party?'Badlo':'Order kis ke liye?'}</span></button>
+      <button class="act" data-a="catalog"><i>📦</i><b>Catalogue</b><span>${S.items.length} products</span></button>
+      <button class="act" data-a="cart"><i>🧾</i><b>Current order</b><span>${S.cart.length} items · ${money(cartTotal())}</span></button>
+      <button class="act" data-a="orders"><i>📋</i><b>My orders</b><span>Status dekho</span></button>
+    </div>
+    ${S.party?await partyCard(S.party,true):''}
+  `;
+  $$('.act').forEach(b=>b.onclick=()=>{ const a=b.dataset.a; a==='party'?go('parties'):go(a) });
+  const qr=$('#qRetry'); if(qr) qr.onclick=flushQueue;
+}
+
+/* ================= CATALOGUE ================= */
+function catalog(){
+  hdSub();
+  const v=$('#view');
+  const used=new Set(S.items.map(i=>i.category));
+  const cats=S.cats.filter(c=>used.has(c.name));
+  v.innerHTML=`
+    <input class="search mb" id="cq" placeholder="Search product, code, size…" value="${esc(S.q)}">
+    <div class="chips" id="cchips">
+      <button class="chip ${!S.cat?'on':''}" data-c="">All</button>
+      ${cats.map(c=>`<button class="chip ${S.cat===c.name?'on':''}" data-c="${esc(c.name)}">${esc(c.name)}</button>`).join('')}
+    </div>
+    <div class="grid" id="cgrid"></div>`;
+  $('#cq').oninput=e=>{ S.q=e.target.value; paintGrid() };
+  $$('#cchips .chip').forEach(b=>b.onclick=()=>{ S.cat=b.dataset.c; lsSet(LS.cat,S.cat); $$('#cchips .chip').forEach(x=>x.classList.toggle('on',x===b)); paintGrid() });
+  paintGrid();
+}
+function paintGrid(){
+  const q=S.q.trim().toLowerCase();
+  const words=q.split(/\s+/).filter(Boolean);
+  let list=S.items.filter(i=>!S.cat||i.category===S.cat);
+  if(words.length) list=list.filter(i=>{
+    const hay=(i.name+' '+i.app_code+' '+(i.series||'')+' '+i.category+' '+(S.varsByItem[i.id]||[]).map(v=>v.size+' '+v.finish).join(' ')).toLowerCase();
+    return words.every(w=>hay.includes(w));
+  });
+  const g=$('#cgrid');
+  if(!list.length){ g.innerHTML='<div class="empty" style="grid-column:1/-1">Koi product nahi mila</div>'; return }
+  g.innerHTML=list.slice(0,240).map(i=>{
+    const av=itemAvail(i.id), inCart=S.cart.filter(l=>(S.varsByItem[i.id]||[]).some(v=>v.variant_id===l.vid)).length;
+    const tag=i.is_new?'<span class="pill p-gold tag">NEW</span>':i.bestseller?'<span class="pill p-gold tag">BESTSELLER</span>':'';
+    return `<button class="prod" data-i="${i.id}">
+      <div class="ph">${ph(i.app_code,i.app_code)}${tag}</div>
+      <div class="b">
+        <div class="nm ell">${esc(i.name)}</div>
+        <div class="cd">${esc(i.app_code)}</div>
+        <div class="rt">${priceRange(i.id)||'<span class="muted">Rate on request</span>'}</div>
+        <div class="row" style="margin-top:4px;gap:6px">
+          <span class="pill ${av>0?'p-g':'p-n'}">${av>0?'In stock':'On order'}</span>
+          ${inCart?`<span class="pill p-gold">${inCart} in order</span>`:''}
+        </div>
+      </div></button>`;
+  }).join('');
+  $$('#cgrid .prod').forEach(b=>b.onclick=()=>productSheet(+b.dataset.i));
+}
+
+function productSheet(id){
+  const it=S.itemById[id], vs=S.varsByItem[id]||[];
+  openSheet(`
+    <div class="sh-h"><div class="grab"></div>
+      <div class="row"><div class="grow"><div style="font-weight:600;font-size:16px" class="ell">${esc(it.name)}</div>
+        <div class="small muted">${esc(it.app_code)} · ${esc(it.category)}</div></div>
+        <button class="x" id="shX">×</button></div></div>
+    <div class="sh-b">
+      <div class="bigph">${ph(it.app_code,it.name)}</div>
+      ${it.description?`<p class="muted small" style="margin:0 0 12px">${esc(it.description)}</p>`:''}
+      ${!S.party?`<div class="net">Pehle dealer select karo — order usi ke naam se banega.</div>`:''}
+      ${vs.length?`<table class="vt"><thead><tr><th>Size / Finish</th><th>Rate</th><th style="text-align:right">Qty</th></tr></thead><tbody>
+        ${vs.map(v=>{ const q=cartQty(v.variant_id), av=+v.available||0; return `<tr>
+          <td><b>${esc(v.size)}</b><br><span class="small muted">${esc(v.finish)}</span>
+              <span class="pill ${av>0?'p-g':'p-n'}" style="margin-left:4px">${av>0?av+' avl':'0'}</span></td>
+          <td>${money(v.sale_rate)}</td>
+          <td style="text-align:right"><span class="stp ${q?'has':''}" data-v="${v.variant_id}">
+            <button data-d="-1">−</button><input type="number" inputmode="numeric" min="0" value="${q||''}" placeholder="0"><button data-d="1">+</button></span></td>
+        </tr>`}).join('')}</tbody></table>`:'<div class="empty">Is product ke size/finish set nahi hai</div>'}
+    </div>
+    <div class="foot">
+      <button class="btn btn-w" id="shWa">WhatsApp</button>
+      <button class="btn btn-p grow" id="shDone">Done · ${S.cart.length} items</button>
+    </div>`);
+  const vById={}; vs.forEach(v=>vById[v.variant_id]=v);
+  $$('#sheet .stp').forEach(sp=>{
+    const v=vById[sp.dataset.v], inp=$('input',sp);
+    const upd=val=>{ setQty(v,it,val); const q=cartQty(v.variant_id); inp.value=q||''; sp.classList.toggle('has',!!q); $('#shDone').textContent='Done · '+S.cart.length+' items' };
+    $$('button',sp).forEach(b=>b.onclick=()=>upd((+inp.value||0)+(+b.dataset.d)));
+    inp.onchange=()=>upd(inp.value);
+  });
+  $('#shX').onclick=closeSheet;
+  $('#shDone').onclick=()=>{ closeSheet(); if(S.tab==='catalog') paintGrid() };
+  $('#shWa').onclick=()=>shareProduct(it);
+}
+function shareProduct(it){
+  const vs=S.varsByItem[it.id]||[];
+  const lines=vs.slice(0,30).map(v=>`• ${v.size} ${v.finish} — ${money(v.sale_rate)}`).join('\n');
+  const txt=`*${CFG.firm}*\n${it.name} (${it.app_code})\n${it.category}\n\n${lines}\n\nPhoto: ${imgUrl(it.app_code)}\nOrder online: ${IMGBASE}`;
+  waOpen(S.party&&S.party.phone, txt);
+}
+function waOpen(phone,txt){
+  const p=m10(phone);
+  window.open('https://wa.me/'+(p?'91'+p:'')+'?text='+encodeURIComponent(txt),'_blank');
+}
+
+/* ================= CART / ORDER ================= */
+function cart(){
+  hdSub();
+  const v=$('#view');
+  v.innerHTML=`
+    <h2>Current order</h2>
+    <button class="sel-party mb" id="cParty">
+      ${S.party?`<div class="av">${esc(initials(S.party.name))}</div>
+        <div class="grow"><div style="font-weight:600" class="ell">${esc(S.party.name)}</div>
+        <div class="small muted ell">${esc([S.party.city,S.party.phone].filter(Boolean).join(' · '))}</div></div><span class="small muted">Change</span>`
+      :`<div class="av">+</div><div class="grow"><b>Dealer select karo</b><div class="small muted">Order kis ke liye hai?</div></div>`}
+    </button>
+    ${S.party&&!m10(S.party.phone)?`<div class="net">Is dealer ka mobile number nahi hai. Order ke liye 10-digit mobile zaroori hai.
+      <input class="inp" id="cMob" inputmode="numeric" placeholder="Dealer mobile" style="margin-top:8px"></div>`:''}
+    <div class="card mb">
+      ${S.cart.length?S.cart.map((l,ix)=>`
+        <div class="cl">
+          <div class="th">${ph(l.code,'')}</div>
+          <div class="grow">
+            <div style="font-weight:600" class="ell">${esc(l.name)}</div>
+            <div class="small muted ell">${esc(l.code)} · ${esc(l.size)} · ${esc(l.finish)}</div>
+            <div class="row" style="margin-top:6px;justify-content:space-between">
+              <span class="stp has" data-ix="${ix}"><button data-d="-1">−</button><input type="number" inputmode="numeric" value="${l.qty}"><button data-d="1">+</button></span>
+              <div class="amt">${money(l.qty*l.rate)}<div class="small muted" style="font-weight:400">@ ${money(l.rate)}</div></div>
+            </div>
+            ${l.qty>l.avail?`<div class="small" style="color:var(--amber);margin-top:4px">Stock ${Math.max(0,l.avail)} — baaki order par</div>`:''}
+          </div>
+        </div>`).join('')
+      :`<div class="empty">Order khaali hai.<br><button class="btn btn-o" id="cBrowse" style="margin-top:12px">Catalogue kholo</button></div>`}
+    </div>
+    ${S.cart.length?`
+    <div class="card mb">
+      <div class="tot"><span class="muted">Items</span><span>${S.cart.length} · ${S.cart.reduce((a,l)=>a+l.qty,0)} pcs</span></div>
+      <div class="tot g"><span>Estimate</span><span>${money(cartTotal())}</span></div>
+      <div class="small muted">Final rate / discount Accounts me bill banate waqt lagega.</div>
+    </div>
+    <label class="f">Note (delivery, transport, discount request…)</label>
+    <textarea class="inp mb" id="cNote" rows="2" placeholder="Optional">${esc(lsGet('sm_note',''))}</textarea>
+    <button class="btn btn-g btn-b mb" id="cSubmit">Submit order</button>
+    <div class="row">
+      <button class="btn btn-w grow" id="cWa">Share on WhatsApp</button>
+      <button class="btn btn-o" id="cClear">Clear</button>
+    </div>`:''}
+  `;
+  $('#cParty').onclick=()=>go('parties');
+  const br=$('#cBrowse'); if(br) br.onclick=()=>go('catalog');
+  $$('#view .stp').forEach(sp=>{
+    const l=S.cart[+sp.dataset.ix], inp=$('input',sp);
+    const upd=val=>{ const v={variant_id:l.vid,sale_rate:l.rate,available:l.avail,size:l.size,finish:l.finish};
+      setQty(v,{app_code:l.code,name:l.name},val); cart() };
+    $$('button',sp).forEach(b=>b.onclick=()=>upd(l.qty+(+b.dataset.d)));
+    inp.onchange=()=>upd(inp.value);
+  });
+  if(!S.cart.length) return;
+  $('#cNote').oninput=e=>lsSet('sm_note',e.target.value);
+  $('#cClear').onclick=()=>{ if(confirm('Poora order clear karna hai?')){ S.cart=[]; lsSet('sm_note',''); saveCart(); cart() } };
+  $('#cWa').onclick=()=>waOpen(S.party&&S.party.phone, orderText(null));
+  $('#cSubmit').onclick=submitOrder;
+}
+function orderText(orderNo){
+  const p=S.party;
+  return `*${CFG.firm} — Order${orderNo?' '+orderNo:''}*\n${p?p.name+(p.city?', '+p.city:''):''}\n\n`+
+    S.cart.map((l,i)=>`${i+1}. ${l.name} (${l.code}) ${l.size} ${l.finish} × ${l.qty} = ${money(l.qty*l.rate)}`).join('\n')+
+    `\n\n*Estimate: ${money(cartTotal())}*\n(Final bill as per GST & applicable discount)\n— ${S.me}`;
+}
+async function submitOrder(){
+  if(!S.party){ toast('Pehle dealer select karo','err'); go('parties'); return }
+  const mobIn=$('#cMob');
+  const mob=m10(mobIn?mobIn.value:S.party.phone);
+  if(mob.length!==10){ toast('Dealer ka 10-digit mobile daalo','err'); if(mobIn) mobIn.focus(); return }
+  const note=($('#cNote').value||'').trim();
+  const payload={
+    client_ref:'sm-'+S.slug+'-'+Date.now().toString(36)+'-'+rnd(),
+    name:S.party.name, firm:S.party.name, city:S.party.city||'', mobile:mob,
+    note:('Salesman: '+S.me+(note?' | '+note:'')).slice(0,500),
+    client_at:String(Date.now()), attempt:1,
+    items:S.cart.map(l=>({code:l.code,name:l.name,size:l.size,finish:l.finish,qty:l.qty,price:l.rate})),
+  };
+  const shareTxt=orderText(null);
+  // queue first — so nothing is lost if network drops mid-request
+  S.queue.push(payload); lsSet(LS.queue,S.queue);
+  const sentCart=S.cart; S.cart=[]; lsSet('sm_note',''); saveCart();
+  $('#cSubmit').disabled=true;
+  const res=await sendOne(payload);
+  if(res&&res.ok){
+    toast('Order '+res.order_no+' booked ✓');
+    openSheet(`<div class="sh-h"><div class="grab"></div></div><div class="sh-b" style="text-align:center;padding-bottom:6px">
+      <div style="font-size:44px">✓</div><h2 style="margin:4px 0">Order ${esc(res.order_no)} booked</h2>
+      <p class="muted">${esc(S.party.name)} · ${money(sentCart.reduce((a,l)=>a+l.qty*l.rate,0))}<br>Accounts team ko order mil gaya.</p>
+      <button class="btn btn-w btn-b mb" id="okWa">Dealer ko WhatsApp par bhejo</button>
+      <button class="btn btn-o btn-b" id="okX">Done</button></div>`);
+    $('#okWa').onclick=()=>waOpen(mob, shareTxt.replace('— Order','— Order '+res.order_no));
+    $('#okX').onclick=closeSheet;
+    loadMyOrders().then(()=>{ if(S.tab==='cart') cart() });
+  }else{
+    toast('Network nahi hai — order phone par save hai, baad me jayega','err');
+  }
+  cart();
+}
+async function sendOne(p){
+  try{
+    const {data,error}=await sb.rpc('place_order',{p});
+    if(error) throw error;
+    S.queue=S.queue.filter(x=>x.client_ref!==p.client_ref); lsSet(LS.queue,S.queue);
+    return data;
+  }catch(e){
+    const msg=String(e&&e.message||e);
+    // validation errors will never succeed on retry — drop & tell the user
+    if(/mobile|items|bad ref|too many/i.test(msg)){
+      S.queue=S.queue.filter(x=>x.client_ref!==p.client_ref); lsSet(LS.queue,S.queue);
+      toast('Order reject: '+msg,'err');
+    }else p.attempt=(p.attempt||1)+1, lsSet(LS.queue,S.queue);
+    return null;
+  }
+}
+async function flushQueue(){
+  if(!S.queue.length) return;
+  let ok=0;
+  for(const p of [...S.queue]){ const r=await sendOne(p); if(r&&r.ok) ok++ }
+  if(ok){ toast(ok+' pending order bhej diye ✓'); await loadMyOrders() }
+  if(S.tab==='home') home();
+}
+window.addEventListener('online',flushQueue);
+
+/* ================= DEALERS ================= */
+function parties(){
+  hdSub();
+  const v=$('#view');
+  v.innerHTML=`
+    <input class="search mb" id="pq" placeholder="Dealer name, city, mobile…" value="${esc(S.pq)}">
+    <div class="list" id="plist"></div>
+    <h3>Naya dealer?</h3>
+    <div class="card">
+      <div class="small muted">Accounts me nahi hai to yahan se order bhejo — owner party bana dega.</div>
+      <label class="f">Firm / Dealer name</label><input class="inp" id="nN">
+      <label class="f">Mobile</label><input class="inp" id="nM" inputmode="numeric">
+      <label class="f">City</label><input class="inp" id="nC">
+      <button class="btn btn-p btn-b" id="nGo" style="margin-top:12px">Is dealer ke liye order lo</button>
+    </div>`;
+  $('#pq').oninput=e=>{ S.pq=e.target.value; paintParties() };
+  $('#nGo').onclick=()=>{
+    const name=$('#nN').value.trim(), phone=m10($('#nM').value), city=$('#nC').value.trim();
+    if(!name){ toast('Dealer name daalo','err'); return }
+    if(phone.length!==10){ toast('10-digit mobile daalo','err'); return }
+    S.party={party_id:null,name,phone,city,balance:0,isNew:true}; saveCart();
+    toast('Dealer set: '+name); go('catalog');
+  };
+  paintParties();
+}
+function paintParties(){
+  const words=S.pq.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  let list=S.parties;
+  if(words.length) list=list.filter(p=>{ const h=(p.name+' '+(p.city||'')+' '+(p.phone||'')+' '+(p.code||'')).toLowerCase(); return words.every(w=>h.includes(w)) });
+  const el=$('#plist');
+  if(!list.length){ el.innerHTML='<div class="empty card">Koi dealer nahi mila</div>'; return }
+  el.innerHTML=list.slice(0,80).map(p=>{ const b=+p.balance||0; return `
+    <button class="li" data-p="${p.party_id}">
+      <div class="av">${esc(initials(p.name))}</div>
+      <div class="grow"><div style="font-weight:600" class="ell">${esc(p.name)}</div>
+        <div class="small muted ell">${esc([p.city,p.phone].filter(Boolean).join(' · ')||'—')}</div></div>
+      <div class="amt ${b>0?'':'muted'}" style="${b>0?'color:var(--red)':''}">${b?money(Math.abs(b)):'—'}<div class="small muted" style="font-weight:400">${b>0?'due':b<0?'advance':''}</div></div>
+    </button>`}).join('');
+  $$('#plist .li').forEach(b=>b.onclick=()=>partySheet(S.parties.find(p=>String(p.party_id)===b.dataset.p)));
+}
+async function partyCard(p,compact){
+  const b=+p.balance||0;
+  let bills=[];
+  if(p.party_id){
+    try{
+      let q=sb.from(S.smViews?'sm_bills':'v_bill_outstanding').select('vno,vdate,total,due,age_days')
+        .eq('party_id',p.party_id).gt('due',0).order('vdate').limit(20);
+      if(!S.smViews) q=q.eq('vtype','sale');
+      const {data}=await q;
+      bills=data||[];
+    }catch(e){}
+  }
+  const old=bills.filter(x=>+x.age_days>45);
+  return `<div class="card" style="margin-top:14px">
+    <div class="row"><div class="grow"><div class="small muted">${compact?'Selected dealer':'Outstanding'}</div>
+      <div style="font-size:20px;font-weight:600;${b>0?'color:var(--red)':''}">${p.isNew?'New dealer':money(Math.abs(b))+(b<0?' adv':'')}</div></div>
+      ${old.length?`<span class="pill p-r">${old.length} bill 45+ din</span>`:b>0?'<span class="pill p-a">Due</span>':'<span class="pill p-g">Clear</span>'}</div>
+    ${bills.length?`<table class="vt" style="margin-top:10px;box-shadow:none;border:1px solid var(--line-2)"><thead><tr><th>Bill</th><th>Days</th><th style="text-align:right">Due</th></tr></thead><tbody>
+      ${bills.map(x=>`<tr><td>${esc(x.vno)}<br><span class="small muted">${dmy(x.vdate)}</span></td>
+        <td><span class="pill ${+x.age_days>45?'p-r':+x.age_days>30?'p-a':'p-n'}">${x.age_days}</span></td>
+        <td style="text-align:right">${money(x.due)}</td></tr>`).join('')}</tbody></table>`:''}
+  </div>`;
+}
+async function partySheet(p){
+  openSheet(`<div class="sh-h"><div class="grab"></div><div class="row"><div class="av">${esc(initials(p.name))}</div>
+    <div class="grow"><div style="font-weight:600;font-size:16px" class="ell">${esc(p.name)}</div>
+    <div class="small muted">${esc([p.city,p.phone].filter(Boolean).join(' · '))}</div></div><button class="x" id="shX">×</button></div></div>
+    <div class="sh-b" id="psb"><div class="empty">Loading…</div></div>
+    <div class="foot">
+      ${p.phone?`<a class="btn btn-o" href="tel:${esc(m10(p.phone))}">Call</a>`:''}
+      <button class="btn btn-g grow" id="pPick">Iske liye order lo</button></div>`);
+  $('#shX').onclick=closeSheet;
+  $('#pPick').onclick=()=>{
+    if(S.cart.length && S.party && S.party.party_id!==p.party_id && !confirm('Current order '+S.party.name+' ka hai. Ye items '+p.name+' ke order me shift ho jayenge. OK?')) return;
+    S.party=p; saveCart(); closeSheet(); toast('Dealer: '+p.name); go(S.cart.length?'cart':'catalog');
+  };
+  $('#psb').innerHTML=await partyCard(p,false);
+}
+
+/* ================= MY ORDERS ================= */
+async function loadMyOrders(){
+  try{
+    const {data,error}=await sb.from('orders').select('id,order_no,cust_name,city,status,est_total,created_at,note')
+      .like('client_ref','sm-'+S.slug+'-%').order('id',{ascending:false}).limit(100);
+    if(error) throw error;
+    S.myOrders=data||[];
+  }catch(e){ S.myOrders=S.myOrders||[] }
+}
+const ST={ new:['Received','p-a'], confirmed:['Confirmed','p-gold'], converted:['Billed','p-g'], cancelled:['Cancelled','p-r'] };
+async function orders(){
+  hdSub();
+  const v=$('#view');
+  v.innerHTML='<h2>My orders</h2><div class="empty">Loading…</div>';
+  await loadMyOrders();
+  if(S.tab!=='orders') return;
+  v.innerHTML=`<h2>My orders</h2>
+    ${S.queue.length?`<div class="net">${S.queue.length} order abhi bheje nahi gaye. <b id="qRetry" style="text-decoration:underline">Retry</b></div>`:''}
+    ${S.myOrders.length?`<div class="list">${S.myOrders.map(o=>{ const s=ST[o.status]||[o.status,'p-n']; return `
+      <button class="li" data-o="${o.id}">
+        <div class="grow"><div class="row" style="gap:8px"><b>${esc(o.order_no)}</b><span class="pill ${s[1]}">${s[0]}</span></div>
+          <div class="small muted ell">${esc(o.cust_name)}${o.city?' · '+esc(o.city):''} · ${dmy(o.created_at)} ${tm(o.created_at)}</div></div>
+        <div class="amt">${money(o.est_total)}</div></button>`}).join('')}</div>`
+      :'<div class="empty">Abhi tak koi order nahi.</div>'}`;
+  const qr=$('#qRetry'); if(qr) qr.onclick=()=>flushQueue().then(orders);
+  $$('#view .li').forEach(b=>b.onclick=()=>orderSheet(S.myOrders.find(o=>String(o.id)===b.dataset.o)));
+}
+async function orderSheet(o){
+  const s=ST[o.status]||[o.status,'p-n'];
+  openSheet(`<div class="sh-h"><div class="grab"></div><div class="row"><div class="grow"><div style="font-weight:600;font-size:16px">${esc(o.order_no)} <span class="pill ${s[1]}">${s[0]}</span></div>
+    <div class="small muted">${esc(o.cust_name)} · ${dmy(o.created_at)} ${tm(o.created_at)}</div></div><button class="x" id="shX">×</button></div></div>
+    <div class="sh-b" id="osb"><div class="empty">Loading…</div></div>
+    <div class="foot"><button class="btn btn-o grow" id="oRe">Repeat order</button></div>`);
+  $('#shX').onclick=closeSheet;
+  const {data}=await sb.from('order_lines').select('app_code,name,size,finish,variant_id,qty,rate').eq('order_id',o.id).order('id');
+  const ls=data||[];
+  $('#osb').innerHTML=`<div class="card">${ls.map(l=>`<div class="cl"><div class="th">${ph(l.app_code,'')}</div>
+    <div class="grow"><div style="font-weight:600" class="ell">${esc(l.name)}</div><div class="small muted">${esc(l.app_code)} · ${esc(l.size)} · ${esc(l.finish)}</div>
+    <div class="small">${l.qty} × ${money(l.rate)} = <b>${money(l.qty*l.rate)}</b></div></div></div>`).join('')}
+    <div class="tot g"><span>Estimate</span><span>${money(o.est_total)}</span></div></div>
+    ${o.note?`<p class="small muted">${esc(o.note)}</p>`:''}`;
+  $('#oRe').onclick=()=>{
+    const vById={}; S.stock.forEach(v=>vById[v.variant_id]=v);
+    let n=0;
+    ls.forEach(l=>{ const v=vById[l.variant_id]; if(!v) return; const it=S.itemById[v.item_id]; if(!it) return; setQty(v,it,cartQty(v.variant_id)+(+l.qty)); n++ });
+    const p=S.parties.find(x=>x.name===o.cust_name); if(p){ S.party=p; saveCart() }
+    closeSheet(); toast(n+' items order me add'); go('cart');
+  };
+}
+
+/* ================= BOOT / AUTH ================= */
+function lgErr(m){ $('#lgErr').textContent=m||'' }
+async function enter(session){
+  S.user=session.user;
+  const email=(S.user.email||'').toLowerCase();
+  S.me=(S.user.user_metadata&&S.user.user_metadata.name)||email.split('@')[0];
+  S.slug=email.replace(/[^a-z0-9]/g,'').slice(0,24)||'x';
+  $('#login').classList.add('hide'); $('#app').classList.remove('hide');
+  try{
+    await loadAll();
+  }catch(e){
+    $('#view').innerHTML=`<div class="empty">Data load nahi hua.<br><span class="small">${esc(e.message||e)}</span><br>
+      <span class="small">Is login ko sales access nahi hai to owner se baat karo.</span></div>`;
+    return;
+  }
+  await loadMyOrders();
+  go('home');
+  flushQueue();
+}
+async function boot(){
+  sb=supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true}});
+  S.cart=lsGet(LS.cart,[]); S.party=lsGet(LS.party,null); S.queue=lsGet(LS.queue,[]); S.cat=lsGet(LS.cat,'');
+  paintBadge();
+  const {data}=await sb.auth.getSession();
+  if(data&&data.session) enter(data.session);
+  $('#lgF').onsubmit=async e=>{
+    e.preventDefault(); lgErr('');
+    const email=$('#lgEmail').value.trim(), password=$('#lgPass').value;
+    $('#lgBtn').disabled=true;
+    try{
+      const {data,error}=await sb.auth.signInWithPassword({email,password});
+      if(error) throw error;
+      enter(data.session);
+    }catch(err){ lgErr(/invalid/i.test(err.message)?'Email ya password galat hai':err.message) }
+    finally{ $('#lgBtn').disabled=false }
+  };
+  $('#hdOut').onclick=async()=>{ if(!confirm('Logout?')) return; await sb.auth.signOut(); location.reload() };
+  $('#hdSync').onclick=async()=>{ await loadAll(); await loadMyOrders(); await flushQueue(); go(S.tab); toast('Updated ✓') };
+}
+boot();
+</script>
+</body>
+</html>
