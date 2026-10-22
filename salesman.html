@@ -167,6 +167,48 @@ label.f{display:block;font-size:12px;color:var(--tx-2);margin:10px 0 4px}
 #toast.err{background:var(--red)}
 #busy{position:fixed;top:0;left:0;right:0;height:3px;z-index:70;background:var(--gold);transform-origin:left;transform:scaleX(0);transition:transform .4s}
 #busy.on{transform:scaleX(.8);transition:transform 8s cubic-bezier(.1,.7,.2,1)}
+
+/* team hub */
+.day{background:linear-gradient(135deg,#1B1D20,#111214);color:#fff;border-radius:18px;padding:18px;position:relative;overflow:hidden}
+.day:after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;border:1px solid rgba(200,168,74,.25)}
+.day-k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.day-h{font-size:22px;font-weight:600;margin-top:4px}
+.day-s{font-size:13px;color:#B9BEC8;margin-top:2px}
+.ann{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;background:var(--gold-l);color:#5E4A12;border-radius:12px;padding:11px 14px;text-align:left;font-size:13px}
+.ann b{flex:none} .ann .ell{flex:1;min-width:0}
+.tks{display:flex;flex-direction:column;gap:8px}
+.tk{display:flex;align-items:center;gap:12px;background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px;cursor:pointer;border-left:3px solid transparent}
+.tk.urg{border-left-color:var(--red)}
+.tk.done .tk-t{text-decoration:line-through;color:var(--tx-3)}
+.tk-t{font-weight:600;font-size:14px;line-height:1.35}
+.tk-m{font-size:11.5px;color:var(--tx-2);margin-top:2px}
+.tk-m .late{color:var(--red);font-weight:600}
+.chk{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;color:#fff;font-size:15px;font-weight:700}
+.tk.done .chk{background:var(--green);border-color:var(--green)}
+.ring{width:40px;height:40px;border-radius:50%;background:var(--gold-l);color:var(--gold-d);display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+.bar{height:5px;border-radius:3px;background:var(--line-2);margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green);border-radius:3px}
+.av.sm{width:32px;height:32px;font-size:12px}
+.chip .cn{background:var(--gold);color:var(--ink);border-radius:9px;padding:0 6px;font-size:10.5px;margin-left:2px}
+.chips.wrap{flex-wrap:wrap;overflow:visible;margin:0;padding:0}
+#feed{display:flex;flex-direction:column;gap:2px;padding-bottom:8px}
+.msg{display:flex;gap:10px;padding:10px 4px;border-radius:12px}
+.msg.new{background:var(--gold-l)}
+.msg-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:13px}
+.msg-h span{font-size:11px;color:var(--tx-3)} .msg-h .to{color:var(--gold-d)}
+.msg-t{font-weight:600;margin-top:2px}
+.msg-b{font-size:14px;color:var(--tx);margin-top:2px;overflow-wrap:anywhere}
+.task-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px;display:flex;flex-direction:column;gap:8px}
+.task-box.urg{border-color:#F3B7B1}
+.btn-sm{padding:8px 12px;font-size:13px;align-self:flex-start}
+.lnk{font-size:12px;color:var(--gold-d);font-weight:600;margin-top:4px;padding:2px 0}
+.cmp{position:sticky;bottom:calc(66px + var(--safe-b));display:flex;gap:8px;background:var(--bg);padding:10px 0}
+.cmp .inp{flex:1;min-width:0}
+.cmp-t{flex:none;padding:0 12px;border-radius:10px;background:var(--gold-l);color:var(--gold-d);font-weight:600;font-size:13px}
+.seg{display:flex;background:var(--line-2);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;padding:9px;border-radius:9px;font-size:13px;font-weight:500;color:var(--tx-2)}
+.seg button.on{background:#fff;color:var(--ink);font-weight:600;box-shadow:var(--sh)}
+.chip.on .small{color:#C9CDD5}
 .net{background:var(--amber-bg);color:var(--amber);font-size:12px;padding:8px 12px;border-radius:10px;margin-bottom:12px}
 </style>
 </head>
@@ -200,11 +242,11 @@ label.f{display:block;font-size:12px;color:var(--tx-2);margin:10px 0 4px}
   </header>
   <main id="view"></main>
   <nav class="tabs" id="tabs">
-    <button data-t="home"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>Home</button>
+    <button data-t="home"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>Aaj</button>
+    <button data-t="team"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Team<span class="badge hide" id="teamN"></span></button>
     <button data-t="catalog"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Catalogue</button>
     <button data-t="cart"><svg viewBox="0 0 24 24"><path d="M6 6h15l-2 9H8L6 3H3"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Order<span class="badge hide" id="cartN"></span></button>
     <button data-t="parties"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.8.7 3 2.4 3.5 5.2"/></svg>Dealers</button>
-    <button data-t="orders"><svg viewBox="0 0 24 24"><path d="M7 3h10l3 3v15H4V3h3"/><path d="M8 10h8M8 14h8M8 18h5"/></svg>My Orders</button>
   </nav>
 </div>
 
@@ -343,7 +385,7 @@ $('#ov').onclick=closeSheet;
 function go(t){
   S.tab=t;
   $$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-  ({home,catalog,cart,parties,orders})[t]();
+  ({home,team,catalog,cart,parties,orders})[t]();
   window.scrollTo(0,0);
 }
 $$('#tabs button').forEach(b=>b.onclick=()=>go(b.dataset.t));
@@ -359,6 +401,8 @@ async function home(){
   const today=new Date().toISOString().slice(0,10);
   const tOrders=S.myOrders.filter(o=>o.created_at.slice(0,10)===today);
   v.innerHTML=`
+    ${teamHomeHTML()}
+    ${S.tm&&TM.ready?'<h3>Sales</h3>':''}
     ${S.queue.length?`<div class="net">${S.queue.length} order phone par pending hai (network nahi tha). <b id="qRetry" style="text-decoration:underline">Abhi bhejo</b></div>`:''}
     <div class="hero">
       <div class="k">Today</div>
@@ -380,6 +424,7 @@ async function home(){
   `;
   $$('.act').forEach(b=>b.onclick=()=>{ const a=b.dataset.a; a==='party'?go('parties'):go(a) });
   const qr=$('#qRetry'); if(qr) qr.onclick=flushQueue;
+  bindTeamHome();
 }
 
 /* ================= CATALOGUE ================= */
@@ -726,6 +771,368 @@ async function orderSheet(o){
   };
 }
 
+/* ================= TEAM HUB =================
+   Slack jaisa: Yatin (admin) ek jagah se kaam / message bhejta hai —
+   sab ko, ek department ko, ya chune hue logon ko. Har member ko app
+   kholte hi "Aaj ka kaam" dikhta hai; ✓ karke done, thread me reply.
+   Data: team_members, team_posts, team_task_status, team_replies, team_reads
+   (supabase/migrations/…_team_hub.sql). Preview me window.TEAM_API isko badal deta hai. */
+const DEPTS = [
+  { id:'sales',      name:'Sales' },
+  { id:'production', name:'Production' },
+  { id:'packing',    name:'Packing' },
+  { id:'marketing',  name:'Marketing' },
+  { id:'office',     name:'Office' },
+];
+const deptName = id => (DEPTS.find(d=>d.id===id)||{name:id}).name;
+
+const LiveTeam = {
+  async me(email){ const {data}=await sb.from('team_members').select('*').eq('email',email).limit(1); return (data||[])[0]||null },
+  async load(){
+    const [m,p,s,r,rd] = await Promise.all([
+      sb.from('team_members').select('id,name,role,depts,active').eq('active',true).order('name'),
+      sb.from('team_posts').select('*').order('id',{ascending:false}).limit(300),
+      sb.from('team_task_status').select('*'),
+      sb.from('team_replies').select('*').order('id').limit(2000),
+      sb.from('team_reads').select('post_id').eq('member_id',S.tm.id),
+    ]);
+    for(const x of [m,p,s,r,rd]) if(x.error) throw x.error;
+    return { members:m.data, posts:p.data, statuses:s.data, replies:r.data, reads:rd.data.map(x=>x.post_id) };
+  },
+  async send(p){ const {data,error}=await sb.rpc('team_send',{p}); if(error) throw error; return data },
+  async setStatus(post_id,status){ const {error}=await sb.rpc('team_set_status',{p_post:post_id,p_status:status}); if(error) throw error },
+  async reply(post_id,body){ const {error}=await sb.from('team_replies').insert({post_id,member_id:S.tm.id,body}); if(error) throw error },
+  async read(ids){ if(!ids.length) return; await sb.from('team_reads').upsert(ids.map(post_id=>({post_id,member_id:S.tm.id})),{onConflict:'post_id,member_id',ignoreDuplicates:true}) },
+  async setDepts(id,depts){ const {error}=await sb.from('team_members').update({depts}).eq('id',id); if(error) throw error },
+  subscribe(cb){
+    if(!sb.channel) return;
+    sb.channel('team-hub')
+      .on('postgres_changes',{event:'*',schema:'public',table:'team_posts'},cb)
+      .on('postgres_changes',{event:'*',schema:'public',table:'team_task_status'},cb)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'team_replies'},cb)
+      .subscribe();
+  },
+};
+const TeamAPI = () => window.TEAM_API || LiveTeam;
+const TM = { members:[], posts:[], statuses:[], replies:[], reads:new Set(), chan:'all', ready:false };
+
+async function teamInit(email){
+  try{
+    S.tm = await TeamAPI().me(email);
+    if(!S.tm) return;
+    await teamLoad();
+    TeamAPI().subscribe(()=>{ clearTimeout(TM.t); TM.t=setTimeout(async()=>{ await teamLoad(); if(S.tab==='team') paintFeed(); if(S.tab==='home') home() },400) });
+  }catch(e){ console.warn('team',e); S.tm=null }
+}
+async function teamLoad(){
+  const d = await TeamAPI().load();
+  TM.members=d.members; TM.posts=d.posts; TM.statuses=d.statuses; TM.replies=d.replies; TM.reads=new Set(d.reads); TM.ready=true;
+  paintTeamBadge();
+}
+const isAdmin = ()=> !!(S.tm && S.tm.role==='admin');
+const memberById = id => TM.members.find(m=>m.id===id) || { id, name:'—', depts:[] };
+function canSee(p, m=S.tm){
+  if(!m) return false;
+  if(m.role==='admin' || p.created_by===m.id) return true;
+  return p.to_all || (p.to_people||[]).includes(m.id) || (p.to_depts||[]).some(d=>(m.depts||[]).includes(d));
+}
+function recipients(p){
+  return TM.members.filter(m=>m.role!=='admin' && m.id!==p.created_by &&
+    (p.to_all || (p.to_people||[]).includes(m.id) || (p.to_depts||[]).some(d=>(m.depts||[]).includes(d))));
+}
+function statusOf(pid, mid){ const s=TM.statuses.find(x=>x.post_id===pid && x.member_id===mid); return s?s.status:'pending' }
+function audienceLabel(p){
+  if(p.to_all) return 'Sab ko';
+  const a=(p.to_depts||[]).map(d=>'#'+deptName(d));
+  const b=(p.to_people||[]).map(id=>memberById(id).name.split(' ')[0]);
+  return a.concat(b).join(', ') || '—';
+}
+const todayISO = ()=> new Date(Date.now()+5.5*3600e3).toISOString().slice(0,10);
+function dueLabel(d){
+  if(!d) return '';
+  const t=todayISO(), diff=Math.round((Date.parse(d)-Date.parse(t))/864e5);
+  if(diff<0) return `${-diff} din late`;
+  if(diff===0) return 'Aaj';
+  if(diff===1) return 'Kal';
+  return dmy(d);
+}
+function when(ts){
+  const d=new Date(ts), now=new Date(), m=(now-d)/6e4;
+  if(m<1) return 'abhi';
+  if(m<60) return Math.floor(m)+' min';
+  if(d.toDateString()===now.toDateString()) return tm(ts);
+  return dmy(ts)+' '+tm(ts);
+}
+const unreadPosts = ()=> TM.posts.filter(p=>canSee(p) && p.created_by!==S.tm.id && !TM.reads.has(p.id));
+function paintTeamBadge(){
+  const b=$('#teamN'); if(!b) return;
+  const n=S.tm? unreadPosts().length : 0;
+  b.textContent=n; b.classList.toggle('hide',!n);
+}
+
+/* ---------- Home: Aaj ka kaam ---------- */
+function myTasks(){
+  return TM.posts.filter(p=>p.kind==='task' && canSee(p) && recipients(p).some(m=>m.id===S.tm.id))
+    .map(p=>({p, st:statusOf(p.id,S.tm.id)}))
+    .filter(x=>x.st!=='done' || (x.p.due_date||'')>=todayISO())
+    .sort((a,b)=>(a.st==='done')-(b.st==='done') || (b.p.priority==='urgent')-(a.p.priority==='urgent') || String(a.p.due_date||'9').localeCompare(String(b.p.due_date||'9')));
+}
+function taskRow(x){
+  const p=x.p, done=x.st==='done', late=p.due_date && p.due_date<todayISO() && !done;
+  const from=memberById(p.created_by).name.split(' ')[0];
+  const nrep=TM.replies.filter(r=>r.post_id===p.id).length;
+  return `<div class="tk ${done?'done':''} ${p.priority==='urgent'&&!done?'urg':''}" data-tp="${p.id}">
+    <button class="chk" data-chk="${p.id}" aria-label="${done?'Wapas pending karo':'Ho gaya'}">${done?'✓':''}</button>
+    <div class="grow">
+      <div class="tk-t">${esc(p.title||p.body)}</div>
+      <div class="tk-m">${esc(from)} · ${esc(audienceLabel(p))}${p.due_date?` · <span class="${late?'late':''}">${dueLabel(p.due_date)}</span>`:''}${nrep?` · ${nrep} reply`:''}</div>
+    </div>
+    ${x.st==='doing'?'<span class="pill p-a">Chalu</span>':p.priority==='urgent'&&!done?'<span class="pill p-r">Urgent</span>':''}
+  </div>`;
+}
+function teamHomeHTML(){
+  if(!S.tm || !TM.ready) return '';
+  const first=S.tm.name.split(' ')[0];
+  const dstr=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short'});
+  if(isAdmin()) return adminHomeHTML(first,dstr);
+  const ts=myTasks(), open=ts.filter(x=>x.st!=='done').length, ann=unreadPosts().filter(p=>p.kind!=='task');
+  return `<div class="day">
+      <div class="day-k">${esc(dstr)}</div>
+      <div class="day-h">Namaste ${esc(first)}</div>
+      <div class="day-s">${open?`Aaj ${open} kaam baaki hai`:'Aaj ka sab kaam ho gaya ✓'}</div>
+    </div>
+    ${ann.length?`<button class="ann" id="hAnn"><b>${ann.length} naya message</b><span class="ell">${esc(ann[0].title||ann[0].body)}</span><span>›</span></button>`:''}
+    <h3>Aaj ka kaam</h3>
+    <div class="tks">${ts.length?ts.map(taskRow).join(''):'<div class="empty card">Abhi koi kaam assign nahi hai</div>'}</div>`;
+}
+function adminHomeHTML(first,dstr){
+  const tasks=TM.posts.filter(p=>p.kind==='task');
+  const open=tasks.filter(p=>{const r=recipients(p); return r.length && r.some(m=>statusOf(p.id,m.id)!=='done')});
+  const team=TM.members.filter(m=>m.role!=='admin');
+  return `<div class="day">
+      <div class="day-k">${esc(dstr)} · Admin</div>
+      <div class="day-h">Namaste ${esc(first)}</div>
+      <div class="day-s">${open.length} kaam team me khule hain</div>
+      <button class="btn btn-g" id="hSend" style="margin-top:12px">+ Kaam / Message bhejo</button>
+    </div>
+    <h3>Team aaj</h3>
+    <div class="list">${team.map(m=>{
+      const mine=tasks.filter(p=>recipients(p).some(r=>r.id===m.id));
+      const done=mine.filter(p=>statusOf(p.id,m.id)==='done').length;
+      const pct=mine.length?Math.round(done/mine.length*100):0;
+      return `<div class="li"><div class="av">${esc(initials(m.name))}</div>
+        <div class="grow"><div style="font-weight:600" class="ell">${esc(m.name)}</div>
+          <div class="small muted ell">${(m.depts||[]).map(deptName).join(' · ')||'—'}</div>
+          <div class="bar"><i style="width:${pct}%"></i></div></div>
+        <div class="amt">${done}/${mine.length}<div class="small muted" style="font-weight:400">done</div></div></div>`}).join('')}</div>
+    <h3>Khule kaam</h3>
+    <div class="tks">${open.length?open.map(p=>{
+      const r=recipients(p), d=r.filter(m=>statusOf(p.id,m.id)==='done').length;
+      return `<div class="tk ${p.priority==='urgent'?'urg':''}" data-tp="${p.id}"><div class="ring">${d}/${r.length}</div>
+        <div class="grow"><div class="tk-t">${esc(p.title||p.body)}</div>
+        <div class="tk-m">${esc(audienceLabel(p))}${p.due_date?' · '+dueLabel(p.due_date):''}</div></div></div>`}).join('')
+      :'<div class="empty card">Sab kaam poore hain</div>'}</div>
+    <button class="btn btn-o btn-b" id="hMembers" style="margin-top:14px">Team members aur departments</button>`;
+}
+function bindTeamHome(){
+  $$('#view [data-chk]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); toggleDone(+b.dataset.chk) });
+  $$('#view [data-tp]').forEach(b=>b.onclick=()=>threadSheet(+b.dataset.tp));
+  const a=$('#hAnn'); if(a) a.onclick=()=>go('team');
+  const s=$('#hSend'); if(s) s.onclick=()=>composeSheet({});
+  const m=$('#hMembers'); if(m) m.onclick=membersSheet;
+}
+async function toggleDone(pid){
+  const cur=statusOf(pid,S.tm.id), next=cur==='done'?'pending':'done';
+  setLocalStatus(pid,next);
+  if(S.tab==='home') home(); else if(S.tab==='team') paintFeed();
+  try{ await TeamAPI().setStatus(pid,next); if(next==='done') toast('Shabash! Kaam done ✓') }
+  catch(e){ setLocalStatus(pid,cur); toast('Save nahi hua: '+(e.message||e),'err'); go(S.tab) }
+}
+function setLocalStatus(pid,status){
+  const s=TM.statuses.find(x=>x.post_id===pid && x.member_id===S.tm.id);
+  if(s){ s.status=status; s.updated_at=new Date().toISOString() }
+  else TM.statuses.push({post_id:pid,member_id:S.tm.id,status,updated_at:new Date().toISOString()});
+}
+
+/* ---------- Team tab: channels + feed ---------- */
+function myChannels(){
+  const base=[{id:'all',name:'Sab'}];
+  const deps=isAdmin()? DEPTS : DEPTS.filter(d=>(S.tm.depts||[]).includes(d.id));
+  return base.concat(deps).concat([{id:'dm',name:isAdmin()?'Direct':'Yatin se'}]);
+}
+function inChannel(p,c){
+  if(c==='all') return !!p.to_all;
+  if(c==='dm') return !p.to_all && !(p.to_depts||[]).length;
+  return (p.to_depts||[]).includes(c);
+}
+function team(){
+  hdSub();
+  const v=$('#view');
+  if(!S.tm){ v.innerHTML='<div class="empty">Aap team list me nahi ho. Owner se kaho ki aapko Team me jod de.</div>'; return }
+  if(!myChannels().some(c=>c.id===TM.chan)) TM.chan='all';
+  v.innerHTML=`<div class="chips" id="chs">${myChannels().map(c=>{
+      const n=unreadPosts().filter(p=>inChannel(p,c.id)).length;
+      return `<button class="chip ${TM.chan===c.id?'on':''}" data-ch="${c.id}">${c.id==='all'||c.id==='dm'?'':'#'}${esc(c.name)}${n?` <b class="cn">${n}</b>`:''}</button>`}).join('')}</div>
+    <div id="feed"></div>
+    <div class="cmp" id="cmp">
+      ${isAdmin()?'<button class="cmp-t" id="cTask" aria-label="Kaam assign karo">＋ Kaam</button>':''}
+      <input class="inp" id="cMsg" placeholder="${TM.chan==='dm'&&!isAdmin()?'Yatin ko message…':'Message likho…'}" autocomplete="off">
+      <button class="btn btn-p" id="cGo">Bhejo</button>
+    </div>`;
+  $$('#chs .chip').forEach(b=>b.onclick=()=>{ TM.chan=b.dataset.ch; team() });
+  $('#cGo').onclick=quickSend;
+  $('#cMsg').onkeydown=e=>{ if(e.key==='Enter') quickSend() };
+  const t=$('#cTask'); if(t) t.onclick=()=>composeSheet({chan:TM.chan, kind:'task'});
+  paintFeed();
+}
+function paintFeed(){
+  const f=$('#feed'); if(!f) return;
+  const list=TM.posts.filter(p=>canSee(p) && inChannel(p,TM.chan)).slice().sort((a,b)=>a.id-b.id);
+  if(!list.length){ f.innerHTML='<div class="empty">Is channel me abhi koi message nahi</div>'; return }
+  f.innerHTML=list.map(msgHTML).join('');
+  $$('#feed [data-chk]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); toggleDone(+b.dataset.chk) });
+  $$('#feed [data-th]').forEach(b=>b.onclick=()=>threadSheet(+b.dataset.th));
+  window.scrollTo(0,document.body.scrollHeight);
+  const ids=list.filter(p=>!TM.reads.has(p.id)&&p.created_by!==S.tm.id).map(p=>p.id);
+  if(ids.length){ ids.forEach(i=>TM.reads.add(i)); paintTeamBadge(); const cn=$('#chs .chip.on .cn'); if(cn) cn.remove(); TeamAPI().read(ids).catch(()=>{}) }
+}
+function msgHTML(p){
+  const a=memberById(p.created_by), nrep=TM.replies.filter(r=>r.post_id===p.id).length;
+  let task='';
+  if(p.kind==='task'){
+    const r=recipients(p), d=r.filter(m=>statusOf(p.id,m.id)==='done').length;
+    const mine=r.some(m=>m.id===S.tm.id), st=mine?statusOf(p.id,S.tm.id):null;
+    task=`<div class="task-box ${p.priority==='urgent'?'urg':''}">
+      <div class="row"><span class="pill ${p.priority==='urgent'?'p-r':'p-gold'}">${p.priority==='urgent'?'Urgent kaam':'Kaam'}</span>
+        ${p.due_date?`<span class="small muted">Due: ${dueLabel(p.due_date)}</span>`:''}<span class="grow"></span><span class="small muted">${d}/${r.length} done</span></div>
+      <div class="bar"><i style="width:${r.length?d/r.length*100:0}%"></i></div>
+      ${mine?`<button class="btn ${st==='done'?'btn-o':'btn-g'} btn-sm" data-chk="${p.id}">${st==='done'?'✓ Ho gaya (wapas lo)':'Ho gaya ✓'}</button>`:''}
+    </div>`;
+  }
+  return `<div class="msg ${!TM.reads.has(p.id)&&p.created_by!==S.tm.id?'new':''}">
+    <div class="av sm">${esc(initials(a.name))}</div>
+    <div class="grow">
+      <div class="msg-h"><b>${esc(a.name)}</b><span>${when(p.created_at)}</span>${TM.chan!=='all'&&!p.to_all?`<span class="to">→ ${esc(audienceLabel(p))}</span>`:''}</div>
+      ${p.title?`<div class="msg-t">${esc(p.title)}</div>`:''}
+      ${p.body?`<div class="msg-b">${esc(p.body).replace(/\n/g,'<br>')}</div>`:''}
+      ${task}
+      <button class="lnk" data-th="${p.id}">${nrep?`${nrep} reply ›`:'Reply'}</button>
+    </div></div>`;
+}
+async function quickSend(){
+  const inp=$('#cMsg'), body=inp.value.trim(); if(!body) return;
+  const c=TM.chan, admin=TM.members.find(m=>m.role==='admin');
+  const p={ kind:'message', body, to_all:c==='all', to_depts:(c!=='all'&&c!=='dm')?[c]:[],
+            to_people: c==='dm' ? (isAdmin()?[]:[admin&&admin.id].filter(Boolean)) : [] };
+  if(c==='dm' && isAdmin()){ composeSheet({chan:'dm', kind:'message', body}); return }
+  inp.value='';
+  await doSend(p);
+}
+async function doSend(p){
+  try{ await TeamAPI().send(p); await teamLoad(); if(S.tab==='team') paintFeed(); else go(S.tab); toast(p.kind==='task'?'Kaam bhej diya ✓':'Message bheja ✓') }
+  catch(e){ toast('Nahi gaya: '+(e.message||e),'err') }
+}
+
+/* ---------- Compose (admin): kise, kya, kab ---------- */
+function composeSheet(pre){
+  const team=TM.members.filter(m=>m.role!=='admin');
+  const sel={ all: pre.chan==='all'||!pre.chan, depts:new Set(pre.chan&&pre.chan!=='all'&&pre.chan!=='dm'?[pre.chan]:[]), people:new Set() };
+  let kind=pre.kind||'task', urgent=false;
+  openSheet(`<div class="sh-h"><div class="grab"></div><div class="row"><div class="grow" style="font-weight:600;font-size:16px">Naya kaam / message</div><button class="x" id="shX">×</button></div></div>
+    <div class="sh-b">
+      <div class="seg" id="kSeg"><button data-k="task">Kaam (task)</button><button data-k="message">Message</button></div>
+      <label class="f">Kise bhejna hai?</label>
+      <div class="chips wrap" id="toAll"><button class="chip" data-a="1">Sab ko</button></div>
+      <div class="small muted" style="margin:6px 0 4px">Department</div>
+      <div class="chips wrap" id="toD">${DEPTS.map(d=>`<button class="chip" data-d="${d.id}">#${d.name} <span class="small">${team.filter(m=>(m.depts||[]).includes(d.id)).length}</span></button>`).join('')}</div>
+      <div class="small muted" style="margin:6px 0 4px">Ya sirf in logon ko</div>
+      <div class="chips wrap" id="toP">${team.map(m=>`<button class="chip" data-p="${m.id}">${esc(m.name)}</button>`).join('')}</div>
+      <div id="kTask">
+        <label class="f">Kaam (ek line me)</label><input class="inp" id="cpT" placeholder="Jaise: Rajkot ke 5 dealer visit karo">
+      </div>
+      <label class="f" id="bLbl">Details (optional)</label><textarea class="inp" id="cpB" rows="3" placeholder="Kya, kaise, kitna…">${esc(pre.body||'')}</textarea>
+      <div class="row" id="kDue" style="margin-top:10px;gap:10px">
+        <div class="grow"><label class="f" style="margin-top:0">Kab tak</label><input class="inp" type="date" id="cpD" value="${todayISO()}"></div>
+        <button class="chip" id="cpU" style="align-self:flex-end;padding:11px 14px">Urgent</button>
+      </div>
+      <div class="small muted" id="cpWho" style="margin-top:10px"></div>
+    </div>
+    <div class="foot"><button class="btn btn-g grow" id="cpGo">Bhejo</button></div>`);
+  const paint=()=>{
+    $$('#kSeg button').forEach(b=>b.classList.toggle('on',b.dataset.k===kind));
+    $('#kTask').classList.toggle('hide',kind!=='task'); $('#kDue').classList.toggle('hide',kind!=='task');
+    $('#bLbl').textContent=kind==='task'?'Details (optional)':'Message';
+    $('#toAll .chip').classList.toggle('on',sel.all);
+    $$('#toD .chip').forEach(b=>b.classList.toggle('on',sel.depts.has(b.dataset.d)));
+    $$('#toP .chip').forEach(b=>b.classList.toggle('on',sel.people.has(+b.dataset.p)));
+    $('#cpU').classList.toggle('on',urgent);
+    const r=recipients({to_all:sel.all,to_depts:[...sel.depts],to_people:[...sel.people]});
+    $('#cpWho').textContent=r.length?`${r.length} log ko jayega: ${r.map(m=>m.name.split(' ')[0]).join(', ')}`:'Kisi ko chuno';
+  };
+  $$('#kSeg button').forEach(b=>b.onclick=()=>{ kind=b.dataset.k; paint() });
+  $('#toAll .chip').onclick=()=>{ sel.all=!sel.all; if(sel.all){ sel.depts.clear(); sel.people.clear() } paint() };
+  $$('#toD .chip').forEach(b=>b.onclick=()=>{ const d=b.dataset.d; sel.depts.has(d)?sel.depts.delete(d):sel.depts.add(d); sel.all=false; paint() });
+  $$('#toP .chip').forEach(b=>b.onclick=()=>{ const id=+b.dataset.p; sel.people.has(id)?sel.people.delete(id):sel.people.add(id); sel.all=false; paint() });
+  $('#cpU').onclick=()=>{ urgent=!urgent; paint() };
+  $('#shX').onclick=closeSheet;
+  $('#cpGo').onclick=async()=>{
+    const title=kind==='task'?$('#cpT').value.trim():'', body=$('#cpB').value.trim();
+    if(kind==='task'&&!title){ toast('Kaam ek line me likho','err'); return }
+    if(kind==='message'&&!body){ toast('Message likho','err'); return }
+    const p={ kind, title:title||null, body:body||null, to_all:sel.all, to_depts:[...sel.depts], to_people:[...sel.people],
+              due_date:kind==='task'?($('#cpD').value||null):null, priority:urgent?'urgent':'normal' };
+    if(!recipients(p).length){ toast('Kisi ko chuno — sab, department ya log','err'); return }
+    $('#cpGo').disabled=true; closeSheet(); await doSend(p);
+  };
+  paint();
+}
+
+/* ---------- Thread: details, status, replies ---------- */
+function threadSheet(pid){
+  const p=TM.posts.find(x=>x.id===pid); if(!p) return;
+  const a=memberById(p.created_by), reps=TM.replies.filter(r=>r.post_id===pid);
+  const r=recipients(p), mine=r.some(m=>m.id===S.tm.id);
+  const ST={pending:['Baaki','p-n'],doing:['Chalu','p-a'],done:['Done','p-g']};
+  openSheet(`<div class="sh-h"><div class="grab"></div><div class="row"><div class="grow"><div style="font-weight:600;font-size:16px">${esc(p.title||'Message')}</div>
+      <div class="small muted">${esc(a.name)} · ${when(p.created_at)} · ${esc(audienceLabel(p))}</div></div><button class="x" id="shX">×</button></div></div>
+    <div class="sh-b">
+      ${p.body?`<div class="card mb">${esc(p.body).replace(/\n/g,'<br>')}</div>`:''}
+      ${p.kind==='task'?`
+        ${mine?`<div class="seg mb" id="stSeg">${['pending','doing','done'].map(s=>`<button data-s="${s}" class="${statusOf(pid,S.tm.id)===s?'on':''}">${ST[s][0]}</button>`).join('')}</div>`:''}
+        ${isAdmin()||p.created_by===S.tm.id?`<div class="list mb">${r.map(m=>{const s=statusOf(pid,m.id);return `<div class="li"><div class="av sm">${esc(initials(m.name))}</div><div class="grow">${esc(m.name)}</div><span class="pill ${ST[s][1]}">${ST[s][0]}</span></div>`}).join('')}</div>`:''}`:''}
+      <h3>Replies</h3>
+      <div id="reps">${reps.length?reps.map(x=>{const m=memberById(x.member_id);return `<div class="msg"><div class="av sm">${esc(initials(m.name))}</div><div class="grow"><div class="msg-h"><b>${esc(m.name)}</b><span>${when(x.created_at)}</span></div><div class="msg-b">${esc(x.body)}</div></div></div>`}).join(''):'<div class="small muted">Abhi koi reply nahi</div>'}</div>
+    </div>
+    <div class="foot"><input class="inp grow" id="rpI" placeholder="Reply likho…" autocomplete="off"><button class="btn btn-p" id="rpGo">Bhejo</button></div>`);
+  $('#shX').onclick=closeSheet;
+  $$('#stSeg button').forEach(b=>b.onclick=async()=>{
+    const cur=statusOf(pid,S.tm.id), s=b.dataset.s; setLocalStatus(pid,s);
+    $$('#stSeg button').forEach(x=>x.classList.toggle('on',x===b));
+    try{ await TeamAPI().setStatus(pid,s); if(S.tab==='home') home(); else if(S.tab==='team') paintFeed() }
+    catch(e){ setLocalStatus(pid,cur); toast('Save nahi hua','err') }
+  });
+  const send=async()=>{ const t=$('#rpI').value.trim(); if(!t) return; $('#rpI').value='';
+    try{ await TeamAPI().reply(pid,t); await teamLoad(); threadSheet(pid); if(S.tab==='team') paintFeed() }catch(e){ toast('Reply nahi gaya','err') } };
+  $('#rpGo').onclick=send; $('#rpI').onkeydown=e=>{ if(e.key==='Enter') send() };
+}
+
+/* ---------- Admin: kaun kis department me ---------- */
+function membersSheet(){
+  const team=TM.members.filter(m=>m.role!=='admin');
+  openSheet(`<div class="sh-h"><div class="grab"></div><div class="row"><div class="grow" style="font-weight:600;font-size:16px">Team aur departments</div><button class="x" id="shX">×</button></div></div>
+    <div class="sh-b"><p class="small muted" style="margin-top:0">Tap karke department jodo / hatao. Ek aadmi kai department me ho sakta hai.</p>
+    ${team.map(m=>`<div class="card mb"><div style="font-weight:600;margin-bottom:8px">${esc(m.name)}</div>
+      <div class="chips wrap">${DEPTS.map(d=>`<button class="chip ${(m.depts||[]).includes(d.id)?'on':''}" data-m="${m.id}" data-d="${d.id}">${d.name}</button>`).join('')}</div></div>`).join('')}
+    <p class="small muted">Naya member jodne ke liye uska login ban'na chahiye — Claude se kaho.</p></div>`);
+  $('#shX').onclick=closeSheet;
+  $$('#sheet [data-m]').forEach(b=>b.onclick=async()=>{
+    const m=TM.members.find(x=>x.id===+b.dataset.m), d=b.dataset.d, prev=[...(m.depts||[])];
+    m.depts=prev.includes(d)?prev.filter(x=>x!==d):prev.concat(d); b.classList.toggle('on');
+    try{ await TeamAPI().setDepts(m.id,m.depts); toast(m.name.split(' ')[0]+': '+(m.depts.map(deptName).join(', ')||'koi department nahi')) }
+    catch(e){ m.depts=prev; b.classList.toggle('on'); toast('Save nahi hua','err') }
+  });
+}
+
 /* ================= BOOT / AUTH ================= */
 function lgErr(m){ $('#lgErr').textContent=m||'' }
 async function enter(session){
@@ -742,6 +1149,7 @@ async function enter(session){
     return;
   }
   await loadMyOrders();
+  await teamInit(email);
   go('home');
   flushQueue();
 }
@@ -763,7 +1171,7 @@ async function boot(){
     finally{ $('#lgBtn').disabled=false }
   };
   $('#hdOut').onclick=async()=>{ if(!confirm('Logout?')) return; await sb.auth.signOut(); location.reload() };
-  $('#hdSync').onclick=async()=>{ await loadAll(); await loadMyOrders(); await flushQueue(); go(S.tab); toast('Updated ✓') };
+  $('#hdSync').onclick=async()=>{ await loadAll(); await loadMyOrders(); if(S.tm) await teamLoad(); await flushQueue(); go(S.tab); toast('Updated ✓') };
 }
 boot();
 </script>
