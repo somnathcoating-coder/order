@@ -209,6 +209,24 @@ label.f{display:block;font-size:12px;color:var(--tx-2);margin:10px 0 4px}
 .seg button{flex:1;padding:9px;border-radius:9px;font-size:13px;font-weight:500;color:var(--tx-2)}
 .seg button.on{background:#fff;color:var(--ink);font-weight:600;box-shadow:var(--sh)}
 .chip.on .small{color:#C9CDD5}
+
+/* leads */
+.scan-cta{display:flex;gap:8px;margin-bottom:12px}
+.scan-cta label{cursor:pointer;padding:14px}
+.cg{margin-bottom:16px}
+.cg-h{display:flex;justify-content:space-between;align-items:baseline;padding:4px 2px 8px;font-size:13px}
+.cg-h b{font-size:15px} .cg-h span{color:var(--tx-2);font-size:12px} .cg-h em{color:var(--amber);font-style:normal;font-weight:600}
+.late{color:var(--red);font-weight:600}
+.two{display:flex;gap:10px} .two .half{flex:1;min-width:0}
+.scan-ok{display:flex;gap:12px;align-items:center;background:var(--green-bg);color:#0B6B3D;border-radius:12px;padding:10px;margin-bottom:6px;font-size:13px}
+.scan-ok img{width:96px;height:60px;object-fit:cover;border-radius:6px;flex:none;background:#fff}
+.spin{width:38px;height:38px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--gold);margin:0 auto;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+.acts3{display:flex;gap:8px;margin-bottom:12px} .acts3>*{flex:1}
+.kv>div{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--line-2);font-size:13px}
+.kv>div:last-child{border-bottom:0}
+.kv span{width:92px;flex:none;color:var(--tx-2)} .kv b{font-weight:500;min-width:0;overflow-wrap:anywhere}
 .net{background:var(--amber-bg);color:var(--amber);font-size:12px;padding:8px 12px;border-radius:10px;margin-bottom:12px}
 </style>
 </head>
@@ -402,6 +420,7 @@ async function home(){
   const tOrders=S.myOrders.filter(o=>o.created_at.slice(0,10)===today);
   v.innerHTML=`
     ${teamHomeHTML()}
+    ${followupsHTML()}
     ${S.tm&&TM.ready?'<h3>Sales</h3>':''}
     ${S.queue.length?`<div class="net">${S.queue.length} order phone par pending hai (network nahi tha). <b id="qRetry" style="text-decoration:underline">Abhi bhejo</b></div>`:''}
     <div class="hero">
@@ -425,6 +444,13 @@ async function home(){
   $$('.act').forEach(b=>b.onclick=()=>{ const a=b.dataset.a; a==='party'?go('parties'):go(a) });
   const qr=$('#qRetry'); if(qr) qr.onclick=flushQueue;
   bindTeamHome();
+  const fu=$('#hFu'); if(fu) fu.onclick=()=>{ S.dtab='leads'; LD.stage=''; LD.city=''; go('parties') };
+}
+function followupsHTML(){
+  const t=todayISO(), due=LD.list.filter(l=>l.next_follow_up&&l.next_follow_up<=t&&l.stage!=='won'&&l.stage!=='lost');
+  if(!due.length) return '';
+  const byCity={}; due.forEach(l=>{ const c=cityName(l.city)||'—'; byCity[c]=(byCity[c]||0)+1 });
+  return `<button class="ann" id="hFu" style="background:var(--amber-bg);color:var(--amber)"><b>${due.length} lead follow-up aaj</b><span class="ell">${Object.entries(byCity).map(([c,n])=>c+' '+n).join(' · ')}</span><span>›</span></button>`;
 }
 
 /* ================= CATALOGUE ================= */
@@ -592,7 +618,7 @@ async function submitOrder(){
   const payload={
     client_ref:'sm-'+S.slug+'-'+Date.now().toString(36)+'-'+rnd(),
     name:S.party.name, firm:S.party.name, city:S.party.city||'', mobile:mob,
-    note:('Salesman: '+S.me+(note?' | '+note:'')).slice(0,500),
+    note:('Salesman: '+S.me+(S.party.prospect_id?' | Lead #'+S.party.prospect_id:'')+(note?' | '+note:'')).slice(0,500),
     client_at:String(Date.now()), attempt:1,
     items:S.cart.map(l=>({code:l.code,name:l.name,size:l.size,finish:l.finish,qty:l.qty,price:l.rate})),
   };
@@ -645,26 +671,16 @@ window.addEventListener('online',flushQueue);
 /* ================= DEALERS ================= */
 function parties(){
   hdSub();
+  if(S.dtab!=='cust'){ leadsView(); return }
   const v=$('#view');
-  v.innerHTML=`
+  v.innerHTML=`${dealersTabs()}
     <input class="search mb" id="pq" placeholder="Dealer name, city, mobile…" value="${esc(S.pq)}">
     <div class="list" id="plist"></div>
-    <h3>Naya dealer?</h3>
-    <div class="card">
-      <div class="small muted">Accounts me nahi hai to yahan se order bhejo — owner party bana dega.</div>
-      <label class="f">Firm / Dealer name</label><input class="inp" id="nN">
-      <label class="f">Mobile</label><input class="inp" id="nM" inputmode="numeric">
-      <label class="f">City</label><input class="inp" id="nC">
-      <button class="btn btn-p btn-b" id="nGo" style="margin-top:12px">Is dealer ke liye order lo</button>
-    </div>`;
+    <button class="btn btn-o btn-b" id="toLeads" style="margin-top:14px">Naya dealer? Leads me add karo (card scan)</button>`;
+  bindDealersTabs();
+  $('#toLeads').onclick=()=>{ S.dtab='leads'; parties() };
   $('#pq').oninput=e=>{ S.pq=e.target.value; paintParties() };
-  $('#nGo').onclick=()=>{
-    const name=$('#nN').value.trim(), phone=m10($('#nM').value), city=$('#nC').value.trim();
-    if(!name){ toast('Dealer name daalo','err'); return }
-    if(phone.length!==10){ toast('10-digit mobile daalo','err'); return }
-    S.party={party_id:null,name,phone,city,balance:0,isNew:true}; saveCart();
-    toast('Dealer set: '+name); go('catalog');
-  };
+
   paintParties();
 }
 function paintParties(){
@@ -769,6 +785,256 @@ async function orderSheet(o){
     const p=S.parties.find(x=>x.name===o.cust_name); if(p){ S.party=p; saveCart() }
     closeSheet(); toast(n+' items order me add'); go('cart');
   };
+}
+
+/* ================= LEADS: city-wise pipeline + visiting card scan =================
+   Naye customer / lead salesman ke apne hote hain (doosre salesman ko nahi dikhte, admin ko sab).
+   📷 Card scan: photo → edge fn read-card (Gemini, read-bill jaisa) → form apne aap bhar jata hai,
+   salesman check karke Save. Photo private bucket 'visiting-cards' me. Data: prospects, lead_visits
+   (supabase/migrations/…_leads.sql). Preview me window.LEAD_API isko badal deta hai. */
+const STAGES = [
+  { id:'new',        name:'Naya',          cls:'p-n' },
+  { id:'interested', name:'Interested',    cls:'p-gold' },
+  { id:'followup',   name:'Follow-up',     cls:'p-a' },
+  { id:'won',        name:'Customer bana', cls:'p-g' },
+  { id:'lost',       name:'Nahi',          cls:'p-r' },
+];
+const stageOf = id => STAGES.find(s=>s.id===id) || STAGES[0];
+const BIZ = ['Hardware dealer','Distributor','Interior designer','Architect','Furniture maker','Builder','Retail store','Other'];
+const cityKey = c => String(c||'').trim().toLowerCase().replace(/\s+/g,' ');
+const cityName = c => { const k=cityKey(c); return k? k.replace(/\b\w/g,x=>x.toUpperCase()) : '' };
+
+async function shrinkImg(file, max=1600){
+  const url=URL.createObjectURL(file);
+  try{
+    const img=await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=url });
+    const k=Math.min(1, max/Math.max(img.width,img.height));
+    const c=document.createElement('canvas'); c.width=Math.round(img.width*k); c.height=Math.round(img.height*k);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    return await new Promise(res=>c.toBlob(res,'image/jpeg',.85));
+  }finally{ URL.revokeObjectURL(url) }
+}
+const blobB64 = b => new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(String(r.result).split(',')[1]); r.onerror=rej; r.readAsDataURL(b) });
+
+const LiveLeads = {
+  async list(){ const {data,error}=await sb.from('v_prospects').select('*').order('updated_at',{ascending:false}).limit(2000); if(error) throw error; return data },
+  async visits(id){ const {data}=await sb.from('lead_visits').select('*,m:team_members(name)').eq('prospect_id',id).order('id',{ascending:false}); return (data||[]).map(v=>({...v,member_name:v.m&&v.m.name})) },
+  async scan(file){
+    const blob=await shrinkImg(file,1600), image=await blobB64(blob);
+    const {data:out,error}=await sb.functions.invoke('read-card',{body:{image,mime:'image/jpeg'}});
+    if(error){ let m=error.message||String(error); try{ const j=await error.context.json(); if(j&&j.error) m=j.error }catch(e){} throw new Error(m) }
+    if(!out||!out.ok) throw new Error((out&&out.error)||'Card padh nahi paya');
+    return { data:out.data||{}, blob };
+  },
+  async uploadCard(blob){
+    const path=`${S.tm?S.tm.id:'x'}/${Date.now().toString(36)}-${rnd()}.jpg`;
+    const {error}=await sb.storage.from('visiting-cards').upload(path,blob,{contentType:'image/jpeg'});
+    if(error) throw error; return path;
+  },
+  async cardUrl(path){ const {data}=await sb.storage.from('visiting-cards').createSignedUrl(path,600); return data&&data.signedUrl },
+  async dup(mobile){ const {data}=await sb.rpc('lead_dup',{p_mobile:mobile}); return data||[] },
+  async save(p){ const {data,error}=await sb.rpc('lead_save',{p}); if(error) throw error; return data },
+  async visit(v){ const {error}=await sb.rpc('lead_visit',{p:v}); if(error) throw error },
+};
+const LeadAPI = () => window.LEAD_API || LiveLeads;
+const LD = { list:[], loaded:false, city:'', stage:'', q:'' };
+
+async function leadsLoad(){ try{ LD.list=await LeadAPI().list(); LD.loaded=true }catch(e){ console.warn('leads',e); LD.list=[]; LD.loaded=true } }
+
+/* ---------- Dealers tab: Leads | Customers ---------- */
+function dealersTabs(){
+  return `<div class="seg mb" id="dSeg"><button data-d="leads" class="${S.dtab!=='cust'?'on':''}">Leads · ${LD.list.filter(l=>l.stage!=='won').length}</button><button data-d="cust" class="${S.dtab==='cust'?'on':''}">Customers · ${S.parties.length}</button></div>`;
+}
+function bindDealersTabs(){ $$('#dSeg button').forEach(b=>b.onclick=()=>{ S.dtab=b.dataset.d==='cust'?'cust':'leads'; parties() }) }
+
+async function leadsView(){
+  const v=$('#view');
+  if(!LD.loaded){ v.innerHTML=dealersTabs()+'<div class="empty">Loading…</div>'; bindDealersTabs(); await leadsLoad(); if(S.tab!=='parties'||S.dtab==='cust') return }
+  const all=LD.list;
+  const cities={}; all.forEach(l=>{ const k=cityKey(l.city)||'~'; (cities[k]=cities[k]||[]).push(l) });
+  const cityList=Object.keys(cities).sort((a,b)=>cities[b].length-cities[a].length || a.localeCompare(b));
+  v.innerHTML=`${dealersTabs()}
+    <div class="scan-cta">
+      <label class="btn btn-g grow" for="lScan">📷 Visiting card scan karo<input type="file" accept="image/*" capture="environment" id="lScan" hidden></label>
+      <button class="btn btn-o" id="lNew">+ Haath se</button>
+      ${LeadAPI().sampleCard?'<button class="btn btn-o" id="lSample">Sample card</button>':''}
+    </div>
+    <input class="search mb" id="lq" placeholder="Firm, naam, mobile, area…" value="${esc(LD.q)}">
+    <div class="chips" id="lStage"><button class="chip ${!LD.stage?'on':''}" data-s="">Sab stage</button>${STAGES.map(s=>`<button class="chip ${LD.stage===s.id?'on':''}" data-s="${s.id}">${s.name} <span class="small">${all.filter(l=>l.stage===s.id).length}</span></button>`).join('')}</div>
+    <div class="chips" id="lCity"><button class="chip ${!LD.city?'on':''}" data-c="">Sab city · ${all.length}</button>${cityList.map(k=>`<button class="chip ${LD.city===k?'on':''}" data-c="${esc(k)}">${esc(k==='~'?'City nahi pata':cityName(k))} · ${cities[k].length}</button>`).join('')}</div>
+    <div id="lList"></div>`;
+  $('#lScan').onchange=e=>{ const f=e.target.files[0]; e.target.value=''; if(f) scanCard(f) };
+  $('#lNew').onclick=()=>leadForm({});
+  const smp=$('#lSample'); if(smp) smp.onclick=()=>scanCard(LeadAPI().sampleCard());
+  $('#lq').oninput=e=>{ LD.q=e.target.value; paintLeads() };
+  $$('#lStage .chip').forEach(b=>b.onclick=()=>{ LD.stage=b.dataset.s; $$('#lStage .chip').forEach(x=>x.classList.toggle('on',x===b)); paintLeads() });
+  $$('#lCity .chip').forEach(b=>b.onclick=()=>{ LD.city=b.dataset.c; $$('#lCity .chip').forEach(x=>x.classList.toggle('on',x===b)); paintLeads() });
+  bindDealersTabs();
+  paintLeads();
+}
+function paintLeads(){
+  const el=$('#lList'); if(!el) return;
+  const w=LD.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  let list=LD.list.filter(l=>(!LD.stage||l.stage===LD.stage) && (!LD.city||(cityKey(l.city)||'~')===LD.city));
+  if(w.length) list=list.filter(l=>{ const h=[l.firm,l.person,l.mobile,l.area,l.city,l.biz_type].join(' ').toLowerCase(); return w.every(x=>h.includes(x)) });
+  if(!list.length){ el.innerHTML=`<div class="empty">${LD.list.length?'Is filter me koi lead nahi':'Abhi koi lead nahi.<br>Naye dukaan par jao → visiting card ki photo lo → sab apne aap bhar jayega.'}</div>`; return }
+  const groups={}; list.forEach(l=>{ const k=cityKey(l.city)||'~'; (groups[k]=groups[k]||[]).push(l) });
+  const keys=Object.keys(groups).sort((a,b)=>a==='~'?1:b==='~'?-1:groups[b].length-groups[a].length||a.localeCompare(b));
+  const today=todayISO();
+  el.innerHTML=keys.map(k=>{
+    const ls=groups[k].sort((a,b)=>String(a.next_follow_up||'9').localeCompare(String(b.next_follow_up||'9')));
+    const due=ls.filter(l=>l.next_follow_up&&l.next_follow_up<=today&&l.stage!=='won'&&l.stage!=='lost').length;
+    return `<div class="cg"><div class="cg-h"><b>${esc(k==='~'?'City nahi pata':cityName(k))}</b><span>${ls.length} lead${due?` · <em>${due} follow-up aaj</em>`:''}</span></div>
+      <div class="list">${ls.map(l=>{ const s=stageOf(l.stage), fu=l.next_follow_up, late=fu&&fu<=today&&l.stage!=='won'&&l.stage!=='lost';
+        return `<button class="li" data-l="${l.id}"><div class="av">${esc(initials(l.firm||l.person))}</div>
+          <div class="grow"><div style="font-weight:600" class="ell">${esc(l.firm||l.person||'—')}</div>
+            <div class="small muted ell">${esc([l.person&&l.firm?l.person:'',l.area,l.biz_type].filter(Boolean).join(' · ')||'—')}</div>
+            ${fu?`<div class="small ${late?'late':'muted'}">Follow-up: ${dueLabel(fu)}</div>`:''}</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="pill ${s.cls}">${s.name}</span>${isAdmin()&&l.owner_name?`<span class="small muted">${esc(l.owner_name.split(' ')[0])}</span>`:''}</div></button>` }).join('')}</div></div>`;
+  }).join('');
+  $$('#lList .li').forEach(b=>b.onclick=()=>leadSheet(LD.list.find(l=>String(l.id)===b.dataset.l)));
+}
+
+/* ---------- 📷 Scan ---------- */
+async function scanCard(file){
+  openSheet(`<div class="sh-h"><div class="grab"></div></div><div class="sh-b" style="text-align:center;padding:28px 16px 36px">
+    <div class="spin"></div><h2 style="margin:14px 0 4px">Card padh rahe hain…</h2><p class="muted small">5–15 second. Naam, mobile, address, city sab nikal rahe hain.</p></div>`);
+  try{
+    const {data,blob}=await LeadAPI().scan(file);
+    const d=data||{};
+    const mob=(d.mobiles||[]).map(m10).filter(m=>m.length===10);
+    leadForm({
+      firm:d.firm_name||'', person:d.person_name||'', designation:d.designation||'',
+      mobile:mob[0]||'', mobile2:mob[1]||m10(d.landline||'')||'', email:d.email||'', website:d.website||'',
+      address:d.address||'', area:d.area||'', city:cityName(d.city)||'', state:d.state||'', pincode:d.pincode||'',
+      gstin:d.gstin||'', biz_type:BIZ.includes(d.business_type)?d.business_type:'', notes:d.products||'',
+      stage:'new', next_follow_up:'', _blob:blob, _conf:d.confidence||'',
+    }, true);
+  }catch(e){
+    closeSheet(); toast('Card nahi padh paya: '+(e.message||e)+' — haath se bhar do','err');
+    leadForm({ _blob: file.type.startsWith('image/')?await shrinkImg(file,1600).catch(()=>null):null });
+  }
+}
+
+/* ---------- Form: naya / edit ---------- */
+function leadForm(x, fromScan){
+  const isNew=!x.id;
+  const f=(id,label,val,opt={})=>`<div class="${opt.half?'half':''}"><label class="f" for="lf_${id}">${label}</label><input class="inp" id="lf_${id}" value="${esc(val||'')}" ${opt.attr||''}></div>`;
+  const thumb=x._blob?URL.createObjectURL(x._blob):'';
+  openSheet(`<div class="sh-h"><div class="grab"></div><div class="row"><div class="grow" style="font-weight:600;font-size:16px">${isNew?'Naya lead':'Lead edit'}</div><button class="x" id="shX">×</button></div></div>
+    <div class="sh-b">
+      ${fromScan?`<div class="scan-ok"><img src="${thumb}" alt="Visiting card"><div><b>Card se bhar diya ✓</b><div class="small">Ek baar check kar lo${x._conf==='low'?' — photo saaf nahi thi, dhyan se dekho':''}.</div></div></div>`
+        : thumb?`<div class="scan-ok"><img src="${thumb}" alt="Visiting card"><div class="small">Card photo save hogi.</div></div>`:''}
+      <div id="lfDup"></div>
+      ${f('firm','Firm / dukaan ka naam',x.firm)}
+      <div class="two">${f('person','Contact person',x.person,{half:1})}${f('designation','Post',x.designation,{half:1})}</div>
+      <div class="two">${f('mobile','Mobile',x.mobile,{half:1,attr:'inputmode="numeric"'})}${f('mobile2','Doosra number',x.mobile2,{half:1,attr:'inputmode="numeric"'})}</div>
+      ${f('email','Email',x.email,{attr:'type="email"'})}
+      ${f('address','Address',x.address)}
+      <div class="two">${f('area','Area / locality',x.area,{half:1})}${f('city','City',x.city,{half:1,attr:'list="cityList"'})}</div>
+      <datalist id="cityList">${[...new Set(LD.list.map(l=>cityName(l.city)).concat(S.parties.map(p=>cityName(p.city))).filter(Boolean))].sort().map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
+      <div class="two">${f('state','State',x.state||'Gujarat',{half:1})}${f('pincode','Pincode',x.pincode,{half:1,attr:'inputmode="numeric"'})}</div>
+      ${f('gstin','GSTIN (optional)',x.gstin)}
+      <label class="f">Business type</label>
+      <div class="chips wrap" id="lfBiz">${BIZ.map(b=>`<button type="button" class="chip ${x.biz_type===b?'on':''}" data-b="${esc(b)}">${b}</button>`).join('')}</div>
+      <label class="f">Stage</label>
+      <div class="chips wrap" id="lfStage">${STAGES.filter(s=>s.id!=='won').map(s=>`<button type="button" class="chip ${(x.stage||'new')===s.id?'on':''}" data-s="${s.id}">${s.name}</button>`).join('')}</div>
+      <div class="two">${f('next_follow_up','Agla follow-up',x.next_follow_up,{half:1,attr:'type="date"'})}
+        <div class="half"><label class="f">Shop location</label><button type="button" class="btn btn-o btn-b" id="lfGps">${x.lat?'📍 Saved ✓':'📍 Yahan hoon'}</button></div></div>
+      ${f('maps_url','Google Maps link (optional)',x.maps_url,{attr:'placeholder="Maps se share karke paste karo"'})}
+      <label class="f" for="lf_notes">Notes (kya bechte hain, kya baat hui)</label><textarea class="inp" id="lf_notes" rows="2">${esc(x.notes||'')}</textarea>
+    </div>
+    <div class="foot"><button class="btn btn-g grow" id="lfSave">${isNew?'Lead save karo':'Save'}</button></div>`);
+  let biz=x.biz_type||'', stage=x.stage||'new', loc=x.lat?{lat:x.lat,lng:x.lng,src:x.loc_source}:null;
+  $('#shX').onclick=closeSheet;
+  $$('#lfBiz .chip').forEach(b=>b.onclick=()=>{ biz=biz===b.dataset.b?'':b.dataset.b; $$('#lfBiz .chip').forEach(c=>c.classList.toggle('on',c.dataset.b===biz)) });
+  $$('#lfStage .chip').forEach(b=>b.onclick=()=>{ stage=b.dataset.s; $$('#lfStage .chip').forEach(c=>c.classList.toggle('on',c===b)) });
+  $('#lfGps').onclick=()=>{
+    if(!navigator.geolocation){ toast('Is phone par location nahi mili — Maps link paste karo','err'); return }
+    $('#lfGps').textContent='Location le rahe…';
+    navigator.geolocation.getCurrentPosition(p=>{ loc={lat:+p.coords.latitude.toFixed(6),lng:+p.coords.longitude.toFixed(6),src:'gps',acc:Math.round(p.coords.accuracy)}; $('#lfGps').textContent=`📍 Saved ✓ (±${loc.acc} m)` },
+      ()=>{ $('#lfGps').textContent='📍 Yahan hoon'; toast('Location permission nahi mili — Maps link paste kar sakte ho','err') },
+      {enableHighAccuracy:true,timeout:15000});
+  };
+  const checkDup=async()=>{
+    const m=m10($('#lf_mobile').value); const box=$('#lfDup'); if(!box) return;
+    if(m.length!==10){ box.innerHTML=''; return }
+    const cust=S.parties.find(p=>m10(p.phone)===m);
+    let hits=[]; try{ hits=(await LeadAPI().dup(m)).filter(h=>h.id!==x.id) }catch(e){}
+    box.innerHTML = cust ? `<div class="net">Ye number pehle se <b>customer</b> hai: ${esc(cust.name)}${cust.city?', '+esc(cust.city):''}. Naya lead banane ki zaroorat nahi — Customers me order lo.</div>`
+      : hits.length ? `<div class="net">Ye number pehle se lead me hai: <b>${esc(hits[0].firm||hits[0].person)}</b>${hits[0].owner_name?` (${esc(hits[0].owner_name)})`:''}. Duplicate mat banao.</div>` : '';
+  };
+  $('#lf_mobile').onchange=checkDup; checkDup();
+  $('#lfSave').onclick=async()=>{
+    const g=id=>($('#lf_'+id).value||'').trim();
+    const p={ id:x.id||null, firm:g('firm'), person:g('person'), designation:g('designation'), mobile:m10(g('mobile')), mobile2:m10(g('mobile2')),
+      email:g('email'), address:g('address'), area:g('area'), city:cityName(g('city')), state:g('state'), pincode:g('pincode').replace(/\D/g,'').slice(0,6),
+      gstin:g('gstin').toUpperCase(), biz_type:biz, stage, next_follow_up:g('next_follow_up')||null, maps_url:g('maps_url'), notes:g('notes'),
+      lat:loc?loc.lat:null, lng:loc?loc.lng:null, loc_source:loc?loc.src:(g('maps_url')?'maps_link':null), card_path:x.card_path||null };
+    if(!p.firm && !p.person){ toast('Firm ya contact ka naam daalo','err'); return }
+    if(p.mobile && p.mobile.length!==10){ toast('Mobile 10 digit ka ho','err'); return }
+    if(!p.city){ toast('City daalo — leads city-wise dikhte hain','err'); $('#lf_city').focus(); return }
+    $('#lfSave').disabled=true;
+    try{
+      if(x._blob && !x.card_path){ try{ p.card_path=await LeadAPI().uploadCard(x._blob) }catch(e){ toast('Card photo upload nahi hui — lead save ho raha hai','err') } }
+      await LeadAPI().save(p);
+      closeSheet(); toast(isNew?'Lead save ✓ — '+p.city:'Save ✓');
+      await leadsLoad(); LD.city=cityKey(p.city); if(S.tab==='parties') parties();
+    }catch(e){ $('#lfSave').disabled=false; toast('Save nahi hua: '+(e.message||e),'err') }
+  };
+}
+
+/* ---------- Lead detail ---------- */
+async function leadSheet(l){
+  if(!l) return;
+  const s=stageOf(l.stage), mob=m10(l.mobile);
+  const maps=l.lat?`https://www.google.com/maps/search/?api=1&query=${l.lat},${l.lng}`:(l.maps_url||'');
+  openSheet(`<div class="sh-h"><div class="grab"></div><div class="row"><div class="av">${esc(initials(l.firm||l.person))}</div>
+      <div class="grow"><div style="font-weight:600;font-size:16px" class="ell">${esc(l.firm||l.person)}</div>
+      <div class="small muted ell">${esc([l.person&&l.firm?l.person:'',l.area,cityName(l.city)].filter(Boolean).join(' · '))}</div></div><button class="x" id="shX">×</button></div></div>
+    <div class="sh-b">
+      <div class="row mb" style="flex-wrap:wrap;gap:6px"><span class="pill ${s.cls}">${s.name}</span>${l.biz_type?`<span class="pill p-n">${esc(l.biz_type)}</span>`:''}${l.next_follow_up?`<span class="pill p-a">Follow-up: ${dueLabel(l.next_follow_up)}</span>`:''}</div>
+      <div class="acts3">
+        ${mob?`<a class="btn btn-o" href="tel:${mob}">Call</a><button class="btn btn-w" id="ldWa">WhatsApp</button>`:''}
+        ${maps?`<a class="btn btn-o" href="${esc(maps)}" target="_blank" rel="noopener">Maps</a>`:''}
+      </div>
+      <div class="card mb kv">
+        ${[['Mobile',[l.mobile,l.mobile2].filter(Boolean).join(', ')],['Email',l.email],['Address',[l.address,l.pincode].filter(Boolean).join(' - ')],['GSTIN',l.gstin],['Location',l.lat?`GPS (${l.lat}, ${l.lng})`:l.maps_url?'Maps link':''],['Notes',l.notes],['Lead banaya',(l.owner_name?l.owner_name+' · ':'')+dmy(l.created_at)]]
+          .filter(r=>r[1]).map(r=>`<div><span>${r[0]}</span><b>${esc(r[1])}</b></div>`).join('')}
+      </div>
+      ${l.card_path?'<div class="card mb" id="ldCard" style="text-align:center"><span class="small muted">Card photo load ho rahi…</span></div>':''}
+      <h3>Visit / baat-cheet</h3>
+      <div class="card mb">
+        <textarea class="inp" id="lvN" rows="2" placeholder="Kya baat hui? (jaise: sample dikhaya, rate bhejna hai)"></textarea>
+        <div class="row" style="margin-top:8px;gap:8px"><input class="inp" type="date" id="lvF" value="${esc(l.next_follow_up||'')}" aria-label="Agla follow-up"><button class="btn btn-p" id="lvGo">Visit save</button></div>
+      </div>
+      <div id="lvList" class="small muted">Loading…</div>
+      <h3>Stage badlo</h3>
+      <div class="chips wrap" id="ldStage">${STAGES.filter(x=>x.id!=='won').map(x=>`<button class="chip ${l.stage===x.id?'on':''}" data-s="${x.id}">${x.name}</button>`).join('')}</div>
+      <p class="small muted">"Customer bana" admin karta hai — tab ye party Accounts me ban jati hai (duplicate check ke saath).</p>
+    </div>
+    <div class="foot"><button class="btn btn-o" id="ldEdit">Edit</button><button class="btn btn-g grow" id="ldOrder">Iske liye order lo</button></div>`);
+  $('#shX').onclick=closeSheet;
+  const wa=$('#ldWa'); if(wa) wa.onclick=()=>waOpen(mob,`Namaste ${l.person||''}, main ${S.me} — ${CFG.firm}, Rajkot se. Aapse milke achha laga. Hamara catalogue: ${IMGBASE}`);
+  $('#ldEdit').onclick=()=>leadForm(l);
+  $('#ldOrder').onclick=()=>{
+    if(!mob){ toast('Order ke liye mobile chahiye — pehle Edit me daalo','err'); return }
+    S.party={party_id:null,name:l.firm||l.person,phone:mob,city:cityName(l.city),balance:0,isNew:true,prospect_id:l.id}; saveCart();
+    closeSheet(); toast('Lead: '+(l.firm||l.person)); go('catalog');
+  };
+  $$('#ldStage .chip').forEach(b=>b.onclick=async()=>{
+    try{ await LeadAPI().save({...l, stage:b.dataset.s}); l.stage=b.dataset.s; $$('#ldStage .chip').forEach(c=>c.classList.toggle('on',c===b)); toast('Stage: '+stageOf(l.stage).name); await leadsLoad(); paintLeads() }
+    catch(e){ toast('Save nahi hua','err') }
+  });
+  $('#lvGo').onclick=async()=>{
+    const note=$('#lvN').value.trim(), fu=$('#lvF').value||null; if(!note){ toast('Kya baat hui, likho','err'); return }
+    try{ await LeadAPI().visit({prospect_id:l.id,note,next_follow_up:fu}); l.next_follow_up=fu; $('#lvN').value=''; toast('Visit save ✓'); paintVisits(); await leadsLoad(); paintLeads() }
+    catch(e){ toast('Save nahi hua: '+(e.message||e),'err') }
+  };
+  const paintVisits=async()=>{ const vs=await LeadAPI().visits(l.id); const el=$('#lvList'); if(!el) return;
+    el.innerHTML=vs.length?`<div class="list">${vs.map(v=>`<div class="li" style="align-items:flex-start"><div class="grow"><div style="color:var(--tx)">${esc(v.note)}</div><div class="small muted">${esc(v.member_name||'')} · ${dmy(v.created_at)} ${tm(v.created_at)}${v.next_follow_up?' · agla: '+dueLabel(v.next_follow_up):''}</div></div></div>`).join('')}</div>`:'Abhi koi visit note nahi'; };
+  paintVisits();
+  if(l.card_path){ try{ const u=await LeadAPI().cardUrl(l.card_path); const c=$('#ldCard'); if(c&&u) c.innerHTML=`<img src="${esc(u)}" alt="Visiting card" style="max-width:100%;border-radius:8px">` }catch(e){} }
 }
 
 /* ================= TEAM HUB =================
@@ -1150,6 +1416,7 @@ async function enter(session){
   }
   await loadMyOrders();
   await teamInit(email);
+  await leadsLoad();
   go('home');
   flushQueue();
 }
@@ -1171,7 +1438,7 @@ async function boot(){
     finally{ $('#lgBtn').disabled=false }
   };
   $('#hdOut').onclick=async()=>{ if(!confirm('Logout?')) return; await sb.auth.signOut(); location.reload() };
-  $('#hdSync').onclick=async()=>{ await loadAll(); await loadMyOrders(); if(S.tm) await teamLoad(); await flushQueue(); go(S.tab); toast('Updated ✓') };
+  $('#hdSync').onclick=async()=>{ await loadAll(); await loadMyOrders(); if(S.tm) await teamLoad(); await leadsLoad(); await flushQueue(); go(S.tab); toast('Updated ✓') };
 }
 boot();
 </script>
