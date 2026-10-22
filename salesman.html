@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111214">
+<meta name="robots" content="noindex, nofollow">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -839,7 +840,7 @@ const LiveLeads = {
 const LeadAPI = () => window.LEAD_API || LiveLeads;
 const LD = { list:[], loaded:false, city:'', stage:'', q:'' };
 
-async function leadsLoad(){ try{ LD.list=await LeadAPI().list(); LD.loaded=true }catch(e){ console.warn('leads',e); LD.list=[]; LD.loaded=true } }
+async function leadsLoad(){ try{ LD.list=await LeadAPI().list(); LD.loaded=true; LD.off=false }catch(e){ console.warn('leads',e); LD.list=[]; LD.loaded=true; LD.off=true } }
 
 /* ---------- Dealers tab: Leads | Customers ---------- */
 function dealersTabs(){
@@ -850,6 +851,7 @@ function bindDealersTabs(){ $$('#dSeg button').forEach(b=>b.onclick=()=>{ S.dtab
 async function leadsView(){
   const v=$('#view');
   if(!LD.loaded){ v.innerHTML=dealersTabs()+'<div class="empty">Loading…</div>'; bindDealersTabs(); await leadsLoad(); if(S.tab!=='parties'||S.dtab==='cust') return }
+  if(LD.off){ v.innerHTML=dealersTabs()+'<div class="empty">Leads aur visiting card scan jaldi chalu honge.<br><span class="small">Database setup baaki hai — tab tak Customers tab use karo.</span></div>'; bindDealersTabs(); return }
   const all=LD.list;
   const cities={}; all.forEach(l=>{ const k=cityKey(l.city)||'~'; (cities[k]=cities[k]||[]).push(l) });
   const cityList=Object.keys(cities).sort((a,b)=>cities[b].length-cities[a].length || a.localeCompare(b));
@@ -1234,7 +1236,7 @@ function inChannel(p,c){
 function team(){
   hdSub();
   const v=$('#view');
-  if(!S.tm){ v.innerHTML='<div class="empty">Aap team list me nahi ho. Owner se kaho ki aapko Team me jod de.</div>'; return }
+  if(!S.tm){ v.innerHTML='<div class="empty">Team Hub jaldi chalu hoga.<br><span class="small">Database setup ke baad yahan aapke kaam aur messages aayenge.</span></div>'; return }
   if(!myChannels().some(c=>c.id===TM.chan)) TM.chan='all';
   v.innerHTML=`<div class="chips" id="chs">${myChannels().map(c=>{
       const n=unreadPosts().filter(p=>inChannel(p,c.id)).length;
