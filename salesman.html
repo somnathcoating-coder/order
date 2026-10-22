@@ -1055,7 +1055,7 @@ const DEPTS = [
 const deptName = id => (DEPTS.find(d=>d.id===id)||{name:id}).name;
 
 const LiveTeam = {
-  async me(email){ const {data}=await sb.from('team_members').select('*').eq('email',email).limit(1); return (data||[])[0]||null },
+  async me(){ const {data,error}=await sb.rpc('team_me'); if(error) throw error; const r=Array.isArray(data)?data[0]:data; return r&&r.id?r:null },
   async load(){
     const [m,p,s,r,rd] = await Promise.all([
       sb.from('team_members').select('id,name,role,depts,active').eq('active',true).order('name'),

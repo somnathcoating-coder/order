@@ -1,5 +1,5 @@
 -- =====================================================================
--- AADHAYA LEADS — city-wise pipeline + visiting cards (NOT YET APPLIED)
+-- AADHAYA LEADS — city-wise pipeline + visiting cards
 -- Requires 20261022_team_hub.sql (team_members, team_me, team_is_admin).
 -- Leads are private to the salesman who created them; admin sees all.
 -- They never appear in parties / Order App / Accounts until admin promotes one.
@@ -117,6 +117,6 @@ create trigger trg_audit after insert or update or delete on public.prospects fo
 -- private bucket for card photos: each salesman reads/writes only their own folder; admin reads all
 insert into storage.buckets (id, name, public) values ('visiting-cards','visiting-cards', false) on conflict (id) do nothing;
 create policy vc_insert on storage.objects for insert to authenticated
-  with check (bucket_id = 'visiting-cards' and (storage.foldername(name))[1] = (team_me()).id::text);
+  with check (bucket_id = 'visiting-cards' and (storage.foldername(name))[1] = (public.team_me()).id::text);
 create policy vc_select on storage.objects for select to authenticated
-  using (bucket_id = 'visiting-cards' and (team_is_admin() or (storage.foldername(name))[1] = (team_me()).id::text));
+  using (bucket_id = 'visiting-cards' and (public.team_is_admin() or (storage.foldername(name))[1] = (public.team_me()).id::text));

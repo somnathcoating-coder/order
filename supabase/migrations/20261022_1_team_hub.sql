@@ -1,5 +1,5 @@
 -- =====================================================================
--- AADHAYA TEAM HUB — Slack jaisa kaam/message (NOT YET APPLIED — review, then run once)
+-- AADHAYA TEAM HUB — Slack jaisa kaam/message
 --
 -- Yatin (admin) sends a task or message to: everyone, one or more
 -- departments, or chosen people. Each member sees "Aaj ka kaam" in the
@@ -59,13 +59,16 @@ create table if not exists public.team_reads (
 );
 
 -- ---------- helpers ----------
+-- The caller's team row. Any Accounts login (acct_users: Yatin's several emails) acts as the admin row.
 create or replace function public.team_me() returns team_members
 language sql stable security definer set search_path to 'public' as $$
-  select * from team_members where email = lower(coalesce(auth.jwt()->>'email','')) and active limit 1
+  select m.* from team_members m
+   where m.active and (m.email = lower(coalesce(auth.jwt()->>'email','')) or (m.role = 'admin' and is_acct_user()))
+   order by coalesce(m.email = lower(coalesce(auth.jwt()->>'email','')), false) desc, m.id limit 1
 $$;
 create or replace function public.team_is_admin() returns boolean
 language sql stable security definer set search_path to 'public' as $$
-  select coalesce((select role = 'admin' from team_members where email = lower(coalesce(auth.jwt()->>'email','')) and active), false)
+  select is_acct_user() or coalesce((select role = 'admin' from team_members where email = lower(coalesce(auth.jwt()->>'email','')) and active), false)
 $$;
 create or replace function public.team_can_see(p team_posts) returns boolean
 language sql stable security definer set search_path to 'public' as $$
@@ -151,10 +154,8 @@ create trigger trg_audit after insert or update or delete on public.team_members
 alter publication supabase_realtime add table public.team_posts, public.team_task_status, public.team_replies;
 
 -- ---------- seed: the current team ----------
--- Emails for Bhavesh and Prashant are still pending; add them before they can log in.
+-- Test phase: only Jemil. Bhavesh (7359204601) and Prashant (8200738802) are added once their emails arrive.
 insert into team_members(email, name, phone, role, depts) values
-  ('somnathcoating@gmail.com', 'Yatin',           null,         'admin',    '{sales,production,packing,marketing,office}'),
-  ('jemilgoswami9@gmail.com',  'Jemil Goswami',   '6352102610', 'salesman', '{sales}'),
-  (null,                       'Bhavesh Goswami', '7359204601', 'salesman', '{sales}'),
-  (null,                       'Prashant',        '8200738802', 'salesman', '{sales}')
+  ('somnathcoating@gmail.com', 'Yatin',         null,         'admin',    '{sales,production,packing,marketing,office}'),
+  ('jemilgoswami9@gmail.com',  'Jemil Goswami', '6352102610', 'salesman', '{sales}')
 on conflict do nothing;
