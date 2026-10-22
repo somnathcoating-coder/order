@@ -156,5 +156,5 @@ insert into team_members(email, name, phone, role, depts) values
   ('somnathcoating@gmail.com', 'Yatin',           null,         'admin',    '{sales,production,packing,marketing,office}'),
   ('jemilgoswami9@gmail.com',  'Jemil Goswami',   '6352102610', 'salesman', '{sales}'),
   (null,                       'Bhavesh Goswami', '7359204601', 'salesman', '{sales}'),
-  (null,                       'Prashant',        null,         'salesman', '{sales}')
+  (null,                       'Prashant',        '8200738802', 'salesman', '{sales}')
 on conflict do nothing;
